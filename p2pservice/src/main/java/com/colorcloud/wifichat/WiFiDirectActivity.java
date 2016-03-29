@@ -16,8 +16,6 @@
 
 package com.colorcloud.wifichat;
 
-import static com.colorcloud.wifichat.Constants.*;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,7 +24,6 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -39,6 +36,10 @@ import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment.DeviceActionListener;
 import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+
+import static com.colorcloud.wifichat.Constants.ACT_CREATE;
+import static com.colorcloud.wifichat.Constants.CAT_LOCATION;
+import static com.colorcloud.wifichat.Constants.LAB_HOME;
 
 /**
  * An activity that uses WiFi Direct APIs to discover and connect with available
@@ -187,16 +188,13 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        	case android.R.id.home:   // using app icon for navigation up or home:
+        	case android.R.id.home:   //导航home点击不做反应
         		Log.d(TAG, " navigating up or home clicked.");
         		// startActivity(new Intent(home.class, Intent.FLAG_ACTIVITY_CLEAR_TOP));
         		return true;
         		
             case R.id.atn_direct_enable:
-            	if( !mApp.isP2pEnabled() ){
-                    // Since this is the system wireless settings activity, it's
-                    // not going to send us a result. We will be notified by
-                    // WiFiDeviceBroadcastReceiver instead.
+            	if( !mApp.isP2pEnabled() ){   //当不可用的时候
             		AnalyticsUtils.getInstance(mApp).trackEvent(CAT_LOCATION, ACT_CREATE, LAB_HOME, 1);
                     startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
                 } else {

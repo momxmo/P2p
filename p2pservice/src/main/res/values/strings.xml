@@ -9,13 +9,13 @@
     <string name="empty"></string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-    <string name="client_text">This device will act as a client. Click on Start Chatting button</string>
-    <string name="empty_message">No devices found. Turn on P2P and perform discovery from the Action Bar</string>
-    <string name="p2p_off_warning">Enable P2P from action bar button above or system settings</string>
-    <string name="group_owner_text">"Am I the Group Owner? "</string>
-    <string name="label_me">ME</string>
+    <string name="client_text">这个装置将作为一个客户端。点击开始按钮 聊天</string>
+    <string name="empty_message">没有发现设备。打开P2P和执行发现操作栏</string>
+    <string name="p2p_off_warning">从上面操作栏按钮使P2P或系统设置</string>
+    <string name="group_owner_text">"我是组所有者吗? "</string>
+    <string name="label_me">我</string>
     <string name="label_peers">PEERS</string>
-    <string name="disconnect">disconnect</string>
+    <string name="disconnect">断开</string>
     <string name="about">about</string>
     <string name="help">help</string>
 </resources>

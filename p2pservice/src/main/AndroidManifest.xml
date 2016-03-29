@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.colorcloud.wifichat"
-    android:versionCode="1" android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.colorcloud.wifichat"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <uses-sdk android:minSdkVersion="14" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -11,26 +14,22 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Market filtering -->
-    <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.wifi.direct"
+        android:required="true" />
 
     <application
         android:name=".WiFiDirectApp"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo">
-
         <activity
             android:name=".WiFiDirectActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
-            <intent-filter>
-                <action
-                    android:name="android.intent.action.MAIN" />
-                <category
-                    android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <receiver android:name=".WiFiDirectBroadcastReceiver">
@@ -42,12 +41,24 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <!-- Used for transferring files  after a successful connection -->
-        <service android:enabled="true" android:name=".FileTransferService" />
+        <service
+            android:name=".FileTransferService"
+            android:enabled="true" />
+        <service
+            android:name=".ConnectionService"
+            android:enabled="true" />
 
-        <service android:enabled="true" android:name=".ConnectionService" />
+        <!--搜索-->
+        <activity android:name="com.mo.p2p.activity.Search_activity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>
