@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment.DeviceActionListener;
 import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.tool.L;
 
 import static com.colorcloud.wifichat.Constants.ACT_CREATE;
 import static com.colorcloud.wifichat.Constants.CAT_LOCATION;
@@ -70,7 +71,7 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
         Intent serviceIntent = new Intent(this, ConnectionService.class);
         startService(serviceIntent);  // start the connection service
         
-        PTPLog.d(TAG, "onCreate : home activity launched, start service anyway.");
+        L.d(TAG, "onCreate : home activity launched, start service anyway.");
     }
 
     /** 
@@ -206,6 +207,9 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
                     Toast.makeText(WiFiDirectActivity.this, R.string.p2p_off_warning, Toast.LENGTH_LONG).show();
                     return true;
                 }
+
+                //进入搜索
+//                startActivity(new Intent(WiFiDirectActivity.this, Search_activity.class));
 
                 // show progressbar when discoverying.
                 final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);

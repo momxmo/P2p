@@ -29,7 +29,11 @@
             android:name=".WiFiDirectActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <receiver android:name=".WiFiDirectBroadcastReceiver">
@@ -53,11 +57,6 @@
 
         <!--搜索-->
         <activity android:name="com.mo.p2p.activity.Search_activity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
