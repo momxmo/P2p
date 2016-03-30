@@ -142,7 +142,7 @@ public class DeviceDetailFragment extends Fragment {
     }
 
     /**
-     * p2p connection setup, proceed to setup socket connection.
+     * p2p连接设置,进入设置套接字连接。
      */
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -151,7 +151,7 @@ public class DeviceDetailFragment extends Fragment {
         this.info = info;
         this.getView().setVisibility(View.VISIBLE);
 
-        // The owner IP is now known.
+        // The owner IP是已知的。
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
                 + ((info.isGroupOwner == true) ? getResources().getString(R.string.yes)

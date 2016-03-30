@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment.DeviceActionListener;
 import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.activity.Search_activity;
 import com.mo.p2p.tool.L;
 
 import static com.colorcloud.wifichat.Constants.ACT_CREATE;
@@ -85,7 +86,7 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
         	PTPLog.d(TAG, "onResume : redraw this device details");
         	updateThisDevice(mApp.mThisDevice);
         	
-        	// if p2p connetion info available, and my status is connected, enabled start chatting !
+        	// 果p2p性连接信息可用,我状态连接,启用开始聊天!
             if( mApp.mP2pInfo != null && mApp.mThisDevice.status == WifiP2pDevice.CONNECTED){
             	PTPLog.d(TAG, "onResume : redraw detail fragment");
             	onConnectionInfoAvailable(mApp.mP2pInfo);
@@ -165,7 +166,7 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
     }
     
     /**
-     * handle p2p connection available, update UI.
+     * 处理p2p连接可用,更新UI。
      */
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
     	runOnUiThread(new Runnable() {
@@ -209,7 +210,7 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
                 }
 
                 //进入搜索
-//                startActivity(new Intent(WiFiDirectActivity.this, Search_activity.class));
+                startActivity(new Intent(WiFiDirectActivity.this, Search_activity.class));
 
                 // show progressbar when discoverying.
                 final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager().findFragmentById(R.id.frag_list);
@@ -357,7 +358,7 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
     }
     
     /**
-     * launch chat activity
+     * 启动聊天活动
      */
     public void startChatActivity(final String initMsg) {
     	if( ! mApp.mP2pConnected ){

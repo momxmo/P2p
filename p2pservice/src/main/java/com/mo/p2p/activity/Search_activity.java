@@ -51,7 +51,7 @@ public class Search_activity extends Activity implements View.OnClickListener, D
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
-        mApp = (WiFiDirectApp)getApplication();
+        mApp = (WiFiDirectApp) getApplication();
         mApp.mSearchActivity = this;
         initView();
         initEvent();
@@ -69,6 +69,23 @@ public class Search_activity extends Activity implements View.OnClickListener, D
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mApp.mThisDevice != null) {
+            WiFiDirectApp.PTPLog.d(TAG, "onResume : redraw this device details");
+            updateThisDevice(mApp.mThisDevice);
+
+            // 果p2p性连接信息可用,我状态连接,启用开始聊天!
+            if (mApp.mP2pInfo != null && mApp.mThisDevice.status == WifiP2pDevice.CONNECTED) {
+                WiFiDirectApp.PTPLog.d(TAG, "onResume : redraw detail fragment");
+//                onConnectionInfoAvailable(mApp.mP2pInfo);
+            } else {
+                // XXX stop client, if any.
+            }
+        }
+    }
+
     /**
      * 停止搜索,     停止动画
      */
@@ -82,7 +99,9 @@ public class Search_activity extends Activity implements View.OnClickListener, D
             rippleBackground.removeView(view);
         }
         deviceViewList.clear();
+        ranList.clear();
     }
+
     /**
      * 更新数据
      */
@@ -92,7 +111,7 @@ public class Search_activity extends Activity implements View.OnClickListener, D
         List<WifiP2pDevice> peersList = new ArrayList<>();
         peersList.addAll(deviceList.getDeviceList());
         for (WifiP2pDevice device : peersList) {
-            add_device(R.drawable.phone2, device);
+            add_device(R.drawable.phone2, device, 1);
         }
     }
 
@@ -105,22 +124,40 @@ public class Search_activity extends Activity implements View.OnClickListener, D
         }
     }
 
+
     /**
      * 添加显示
      */
-    public View add_device(int headResource, WifiP2pDevice device) {
+    public View add_device(int headResource, WifiP2pDevice device, int pos) {
+
         View mDeviceView = View.inflate(this, R.layout.item_device, null);
         mDeviceView.setOnClickListener(new ConnectDeviceListener(device, this));
-
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.LEFT_OF, R.id.centerImage);
 
-
-
-        params.setMargins(0, (int) Dimens.dpToPx(120), (int) Dimens.dpToPx(6), (int) Dimens.dpToPx(32));
+        if (pos == 1) {  //左上角
+            params.addRule(RelativeLayout.LEFT_OF, R.id.centerImage);
+            params.setMargins(0, (int) Dimens.dpToPx(120), (int) Dimens.dpToPx(6), (int) Dimens.dpToPx(32));
+        } else if (pos == 2) {   //左边中角
+            params.addRule(RelativeLayout.LEFT_OF, R.id.centerImage);
+            params.setMargins(0, (int) Dimens.dpToPx(220), (int) Dimens.dpToPx(15), 0);
+        } else if (pos == 3) { //左下角
+            params.addRule(RelativeLayout.BELOW, R.id.centerImage);
+            params.setMargins((int) Dimens.dpToPx(40), (int) Dimens.dpToPx(20), 0, 0);
+        } else if (pos == 4) { //正下方
+            params.addRule(RelativeLayout.BELOW, R.id.centerImage);
+            params.setMargins((int) Dimens.dpToPx(140), (int) Dimens.dpToPx(10), 0, 0);
+        } else if (pos == 5) { //右下角
+            params.addRule(RelativeLayout.BELOW, R.id.centerImage);
+            params.setMargins((int) Dimens.dpToPx(210), (int) Dimens.dpToPx(18), 0, 0);
+        } else if (pos == 6) { //右正方
+            params.addRule(RelativeLayout.RIGHT_OF, R.id.centerImage);
+            params.setMargins((int) Dimens.dpToPx(15), (int) Dimens.dpToPx(180), 0, 0);
+        }
         mDeviceView.setLayoutParams(params);
+        mDeviceView.setVisibility(View.GONE);
         rippleBackground.addView(mDeviceView);
         foundDevice(mDeviceView);
+
         ImageView mIVfonudDevice = (ImageView) mDeviceView.findViewById(R.id.foundDevice);
         TextView mTVdeviceName = (TextView) mDeviceView.findViewById(R.id.tv_device_name);
         if (headResource != -1) {
@@ -132,12 +169,20 @@ public class Search_activity extends Activity implements View.OnClickListener, D
         return mDeviceView;
     }
 
-    public int getRandom() {
+    /**
+     * 随机选着位置
+     *
+     * @return
+     */
+    public int getRandom(int range) {
         Random random = new Random();
-        int ranInt = random.nextInt(4);
-        boolean contains = ranList.contains(ranInt);
-        if (contains) {
-            getRandom();
+        int ranInt = random.nextInt(range)+1;
+        while (ranList.contains(ranInt)) {
+            if (ranInt < 0 || ranInt > range) {
+                ranInt = 0;
+            } else {
+                ranInt++;
+            }
         }
         return ranInt;
     }
@@ -149,12 +194,12 @@ public class Search_activity extends Activity implements View.OnClickListener, D
      */
     private void foundDevice(View view) {
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(400);
+        animatorSet.setDuration(1000);
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
         ArrayList<Animator> animatorList = new ArrayList<Animator>();
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleX", 0f, 1.2f, 1f);
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleX", 0f, 1.2f, 1f, 1.6f, 0.8f);
         animatorList.add(scaleXAnimator);
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleY", 0f, 1.2f, 1f);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(foundDevice, "ScaleY", 0f, 1.2f, 1f, 1.6f, 0.8f);
         animatorList.add(scaleYAnimator);
         animatorSet.playTogether(animatorList);
         view.setVisibility(View.VISIBLE);
@@ -175,20 +220,25 @@ public class Search_activity extends Activity implements View.OnClickListener, D
      */
     public void startSearch() {
         rippleBackground.startRippleAnimation();
-        final WifiP2pDevice device = new WifiP2pDevice();
-        device.deviceName = "一号设备";
-
+        final int range = 6;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                View deviceView = add_device(R.drawable.phone2, device);
-                deviceViewList.add(deviceView);
+                for (int i = 1; i <= 6; i++) {
+                    final WifiP2pDevice device = new WifiP2pDevice();
+                    device.deviceName = i + "号设备";
+                    View deviceView = add_device(R.drawable.phone2, device, getRandom(range));
+                    deviceViewList.add(deviceView);
+
+                }
+
             }
         }, 3000);
     }
 
     /**
      * 展示设备信息
+     *
      * @param device
      */
     @Override
@@ -213,6 +263,7 @@ public class Search_activity extends Activity implements View.OnClickListener, D
                         T.showToast(Search_activity.this, "Aborting connection ", Toast.LENGTH_SHORT);
                         L.d(TAG, "cancelConnect : success canceled...");
                     }
+
                     @Override
                     public void onFailure(int reasonCode) {
                         T.showToast(Search_activity.this, "cancelConnect: request failed. Please try again..", Toast.LENGTH_SHORT);
@@ -225,6 +276,7 @@ public class Search_activity extends Activity implements View.OnClickListener, D
 
     /**
      * 建立连接
+     *
      * @param config
      */
     @Override

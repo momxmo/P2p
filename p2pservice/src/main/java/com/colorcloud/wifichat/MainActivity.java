@@ -162,7 +162,7 @@ public class  MainActivity extends Activity {
     }
     
     /**
-     * show the msg in chat fragment, update view must be from ui thread.
+	 * 显示聊天片段msg,必须从ui线程更新视图。
      */
     public void showMessage(final MessageRow row){
     	runOnUiThread(new Runnable() {

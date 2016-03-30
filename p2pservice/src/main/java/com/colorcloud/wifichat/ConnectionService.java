@@ -128,6 +128,10 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
                     mApp.mHomeActivity.updateThisDevice(null);
                     mApp.mHomeActivity.resetData();
                 }
+                if (mApp.mSearchActivity != null) {
+                    mApp.mSearchActivity.updateThisDevice(null);
+                    mApp.mSearchActivity.clearPeers();
+                }
                 AppPreferences.setStringToPref(mApp, AppPreferences.PREF_NAME, AppPreferences.P2P_ENABLED, "0");
             }
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {    //peers列表
@@ -143,7 +147,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
             L.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION : " + networkInfo.getReason() + " : " + networkInfo.toString());
             if (networkInfo.isConnected()) {
                 Log.d(TAG, "processIntent: WIFI_P2P_CONNECTION_CHANGED_ACTION: p2p connected ");
-                // Connected with the other device, request connection info for group owner IP. Callback inside details fragment.
+                // 与其他设备连接,请求连接组所有者IP信息。调内部细节片段。
                 mApp.mP2pMan.requestConnectionInfo(mApp.mP2pChannel, this);
 
             } else {
@@ -163,6 +167,10 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
             L.d(TAG, "processIntent: WIFI_P2P_THIS_DEVICE_CHANGED_ACTION " + mApp.mThisDevice.deviceName);
             if (mApp.mHomeActivity != null) {
                 mApp.mHomeActivity.updateThisDevice(mApp.mThisDevice);
+            }
+
+            if (mApp.mSearchActivity != null) {
+                mApp.mSearchActivity.updateThisDevice(null);
             }
 
             if (mApp.mSearchActivity != null) {
@@ -209,11 +217,12 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
 
         if (mApp.mP2pInfo != null && connectedPeer != null) {
             if (mApp.mP2pInfo.groupFormed && mApp.mP2pInfo.isGroupOwner) {
-                L.d(TAG, "onPeersAvailable : device is groupOwner: startSocketServer");
+                L.d(TAG, "onPeersAvailable : 设备是管理者: 开启服务端socket");
+
                 mApp.startSocketServer();
             } else if (mApp.mP2pInfo.groupFormed && connectedPeer != null) {
-                // XXX client path goes to connection info available after connection established.
-                L.d(TAG, "onConnectionInfoAvailable: 设备是客户端,连接到组所有者:startSocketClient ");
+                // XXX 客户端路径信息之后可用连接建立连接。
+                L.d(TAG, "onConnectionInfoAvailable: 设备是客户端,连接到组所有者 ");
                 mApp.startSocketClient(mApp.mP2pInfo.groupOwnerAddress.getHostAddress());
             }
         }
@@ -303,11 +312,11 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
                 L.d(TAG, "processMessage:  onFinishConnect...");
                 mConnMan.onFinishConnect((SocketChannel) msg.obj);
                 break;
-            case MSG_PULLIN_DATA:
+            case MSG_PULLIN_DATA:                 //接收数据
                 L.d(TAG, "processMessage:  onPullIndata ...");
                 onPullInData((SocketChannel) msg.obj, msg.getData());
                 break;
-            case MSG_PUSHOUT_DATA:
+            case MSG_PUSHOUT_DATA:               //发送数据
                 L.d(TAG, "processMessage: onPushOutData...");
                 onPushOutData((String) msg.obj);
                 break;
@@ -337,7 +346,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
     }
 
     /**
-     * 服务处理数据来自套接字通道
+     * 服务处理数据来自套接字通道，  ————————>  接受数据
      */
     private String onPullInData(SocketChannel schannel, Bundle b) {
         String data = b.getString("DATA");
@@ -428,7 +437,7 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
     }
 
     /**
-     * show the message in activity
+     * 显示活动的消息
      */
     private void showInActivity(final MessageRow row) {
         L.d(TAG, "showInActivity : " + row.mMsg);
@@ -447,22 +456,17 @@ public class ConnectionService extends Service implements ChannelListener, PeerL
     public static String getDeviceStatus(int deviceStatus) {
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
-                //Log.d(TAG, "getDeviceStatus : AVAILABLE");
-                return "Available";
+                return "可用";
             case WifiP2pDevice.INVITED:
-                //Log.d(TAG, "getDeviceStatus : INVITED");
-                return "Invited";
+                return "邀请";
             case WifiP2pDevice.CONNECTED:
-                //Log.d(TAG, "getDeviceStatus : CONNECTED");
-                return "Connected";
+                return "连接";
             case WifiP2pDevice.FAILED:
-                //Log.d(TAG, "getDeviceStatus : FAILED");
-                return "Failed";
+                return "失败";
             case WifiP2pDevice.UNAVAILABLE:
-                //Log.d(TAG, "getDeviceStatus : UNAVAILABLE");
-                return "Unavailable";
+                return "不可用";
             default:
-                return "Unknown = " + deviceStatus;
+                return "未知的 = " + deviceStatus;
         }
     }
 }

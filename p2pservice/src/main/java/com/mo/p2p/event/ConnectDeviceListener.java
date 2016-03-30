@@ -26,6 +26,7 @@ public class ConnectDeviceListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         search_activity.stopSearch();  //停止动画
+        search_activity.clearPeers();
 
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
