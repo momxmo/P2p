@@ -20,7 +20,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.application.WiFiDirectApp;
+import com.mo.p2p.application.WiFiDirectApp.PTPLog;
 
 /**
  * chat fragment attached to main activity.
@@ -28,7 +29,7 @@ import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
 public class ChatFragment extends ListFragment {
 	private static final String TAG = "PTP_ChatFrag";
 	
-	WiFiDirectApp mApp = null; 
+	WiFiDirectApp mApp = null;
 	private static MainActivity mActivity = null;
 	
 	private ArrayList<MessageRow> mMessageList = null;   // a list of chat msgs.

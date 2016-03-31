@@ -18,4 +18,9 @@
     <string name="disconnect">断开</string>
     <string name="about">about</string>
     <string name="help">help</string>
+
+
+    <string name="registerSuccess">注册成功!</string>
+    <string name="RegisterFail">注册失败!</string>
+
 </resources>

@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
+import com.mo.p2p.application.WiFiDirectApp;
 import com.mo.p2p.tool.L;
 
 import java.nio.channels.SocketChannel;

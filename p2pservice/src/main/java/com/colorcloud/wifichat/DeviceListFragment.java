@@ -25,9 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +34,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.application.WiFiDirectApp;
+import com.mo.p2p.application.WiFiDirectApp.PTPLog;
 
 /**
  * A ListFragment that displays available peers on discovery and requests the

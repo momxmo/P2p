@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.application.WiFiDirectApp.PTPLog;
 
 /**
  *<code><pre>

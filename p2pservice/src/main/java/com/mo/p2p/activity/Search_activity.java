@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment;
 import com.colorcloud.wifichat.R;
-import com.colorcloud.wifichat.WiFiDirectApp;
+import com.mo.p2p.application.WiFiDirectApp;
 import com.mo.p2p.event.ConnectDeviceListener;
 import com.mo.p2p.tool.Dimens;
 import com.mo.p2p.tool.L;

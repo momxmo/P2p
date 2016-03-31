@@ -14,6 +14,8 @@ package com.colorcloud.wifichat;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.mo.p2p.application.WiFiDirectApp;
+
 /**
 *<code><pre>
 * CLASS:

@@ -3,7 +3,6 @@ package com.colorcloud.wifichat;
 import static com.colorcloud.wifichat.Constants.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +10,7 @@ import org.json.JSONObject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.application.WiFiDirectApp.PTPLog;
 
 
 public class MessageRow implements Parcelable {

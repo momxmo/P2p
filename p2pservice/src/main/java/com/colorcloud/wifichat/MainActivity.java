@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.mo.p2p.application.WiFiDirectApp;
+
 import java.util.ArrayList;
 import java.util.List;
 

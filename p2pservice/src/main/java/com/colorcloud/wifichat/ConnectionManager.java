@@ -2,6 +2,7 @@ package com.colorcloud.wifichat;
 
 import android.content.Context;
 
+import com.mo.p2p.application.WiFiDirectApp;
 import com.mo.p2p.tool.L;
 
 import java.io.IOException;

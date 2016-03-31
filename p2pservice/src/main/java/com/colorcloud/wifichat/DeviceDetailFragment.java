@@ -35,7 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment.DeviceActionListener;
-import com.colorcloud.wifichat.WiFiDirectApp.PTPLog;
+import com.mo.p2p.application.WiFiDirectApp;
+import com.mo.p2p.application.WiFiDirectApp.PTPLog;
 
 import java.io.IOException;
 import java.io.InputStream;
