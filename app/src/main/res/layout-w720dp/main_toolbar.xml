@@ -228,6 +228,13 @@
                 fab:fab_label="@string/file" />
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_item4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/login72"
+                fab:fab_size="mini"
+                fab:fab_label="Login" />
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/menu_item2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -382,17 +389,5 @@
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>
 
-    <!--
-    <ListView
-        android:id="@+id/right_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:choiceMode="singleChoice"
-		android:background="@drawable/drawer_bg"
-        android:dividerHeight="0dip"
 
-		style="@android:style/Theme.Holo.Light"
-	/>
-    -->
 

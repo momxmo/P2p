@@ -45,12 +45,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
@@ -101,7 +98,6 @@ import com.amaze.filemanager.utils.SmbStreamer.Streamer;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.io.File;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -362,10 +358,8 @@ public class Main extends android.support.v4.app.Fragment {
         fixIcons();
 
         if (theme1 == 1) {
-
             listView.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.holo_dark_background)));
         } else {
-
             if (IS_LIST)
                 listView.setBackgroundDrawable(new ColorDrawable(getResources().getColor(android.R.color.background_light)));
             else listView.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f2f2f2")));

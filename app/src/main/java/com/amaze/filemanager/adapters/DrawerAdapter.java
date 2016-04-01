@@ -41,7 +41,6 @@ import com.amaze.filemanager.ui.drawer.Item;
 import com.amaze.filemanager.ui.icons.IconUtils;
 import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.Futils;
-import com.amaze.filemanager.filesystem.HFile;
 
 import java.io.File;
 import java.util.ArrayList;

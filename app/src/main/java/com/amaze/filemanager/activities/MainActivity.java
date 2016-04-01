@@ -1726,7 +1726,7 @@ public class MainActivity extends AppCompatActivity implements
             mDrawerLayout.setScrimColor(Color.TRANSPARENT);
             isDrawerLocked = true;
         }
-        mDrawerList.addHeaderView(drawerHeaderLayout);
+        mDrawerList.addHeaderView(drawerHeaderLayout);   //ListView添加顶部视图
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         View v = findViewById(R.id.fab_bg);
         if (theme1 == 1)
