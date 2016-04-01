@@ -36,4 +36,5 @@ dependencies {
         transitive = true;
     }
     compile files('libs/hyphenatechat_3.1.0.jar')
+    compile files('libs/easemobchat_2.2.7.jar')
 }

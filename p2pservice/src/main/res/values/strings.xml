@@ -18,6 +18,7 @@
     <string name="disconnect">断开</string>
     <string name="about">about</string>
     <string name="help">help</string>
+    <string name="login">登入</string>
 
 
     <string name="registerSuccess">注册成功!</string>

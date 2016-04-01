@@ -16,7 +16,6 @@
 
 package com.colorcloud.wifichat;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,9 +35,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.colorcloud.wifichat.DeviceListFragment.DeviceActionListener;
+import com.mo.p2p.activity.Search_activity;
 import com.mo.p2p.application.WiFiDirectApp;
 import com.mo.p2p.application.WiFiDirectApp.PTPLog;
-import com.mo.p2p.activity.Search_activity;
+import com.mo.p2p.dialog.LoginDialog;
 import com.mo.p2p.tool.L;
 
 import static com.colorcloud.wifichat.Constants.ACT_CREATE;
@@ -51,7 +52,7 @@ import static com.colorcloud.wifichat.Constants.LAB_HOME;
  * The application should also register a BroadcastReceiver for notification of
  * WiFi state related events.
  */
-public class WiFiDirectActivity extends Activity implements DeviceActionListener {
+public class WiFiDirectActivity extends AppCompatActivity implements DeviceActionListener {
 
     public static final String TAG = "PTP_Activity";
     
@@ -250,7 +251,14 @@ public class WiFiDirectActivity extends Activity implements DeviceActionListener
             	PTPLog.d(TAG, "onOptionsItemSelected : help ");
             	Toast.makeText(this, "learn to use Peer-Peer to fight against censorship", Toast.LENGTH_LONG).show();
             	return true;
-            	
+
+            case R.id.login:
+            	L.d(TAG, "onOptionsItemSelected : login ");
+                LoginDialog loginDialog = new LoginDialog(WiFiDirectActivity.this);
+                loginDialog.show();
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

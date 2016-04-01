@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- Market filtering -->
     <uses-feature
         android:name="android.hardware.wifi.direct"
@@ -39,29 +40,17 @@
         <!-- 设置环信应用的appkey -->
         <meta-data android:name="p2p"  android:value="momxmo#p2p" />
         <!-- 声明sdk所需的service SDK核心功能-->
-        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
-        <!-- 声明sdk所需的receiver -->
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="com.colorcloud.wifichat"/>
-            </intent-filter>
-            <!-- 可选filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-
+        <service android:name="com.easemob.chat.EMChatService" />
 
         <activity
             android:name=".WiFiDirectActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
 
 
         <receiver android:name=".WiFiDirectBroadcastReceiver">
@@ -89,10 +78,7 @@
 
         <!--登入-->
         <activity android:name="com.mo.p2p.activity.Login_activity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
     </application>
 

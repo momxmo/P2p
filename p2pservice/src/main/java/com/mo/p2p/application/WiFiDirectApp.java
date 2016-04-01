@@ -16,8 +16,7 @@ import com.colorcloud.wifichat.ConnectionService;
 import com.colorcloud.wifichat.JSONUtils;
 import com.colorcloud.wifichat.MessageRow;
 import com.colorcloud.wifichat.WiFiDirectActivity;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
+import com.easemob.chat.EMChat;
 import com.mo.p2p.activity.Search_activity;
 
 import org.json.JSONArray;
@@ -62,11 +61,12 @@ public class WiFiDirectApp extends Application {
      */
     private void initIM() {
 
-//        EMChat.getInstance().init(this);
-//        EMChat.getInstance().setDebugMode(true);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
-        EMOptions options = new EMOptions();
+        EMChat.getInstance().setAppkey("momxmo#p2p");
+        EMChat.getInstance().init(this);
+        EMChat.getInstance().setDebugMode(true);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
+//        EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
-        options.setAcceptInvitationAlways(false);
+//        options.setAcceptInvitationAlways(false);
 //        Context appContext = this;
 //        int pid = android.os.Process.myPid();
 //        String processAppName = getAppName(pid);
@@ -83,9 +83,9 @@ public class WiFiDirectApp extends Application {
 //        }
         //初始化
 
-        EMClient.getInstance().init(this, options);
+//        EMClient.getInstance().init(this, options);
 //        在做打包混淆时，关闭debug模式，避免消耗不必要的资源
-        EMClient.getInstance().setDebugMode(true);
+//        EMClient.getInstance().setDebugMode(true);
 
     }
 

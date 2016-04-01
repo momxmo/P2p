@@ -1,10 +1,16 @@
-package com.mo.p2p.activity;
+package com.mo.p2p.dialog;
 
-import android.os.Bundle;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.colorcloud.wifichat.R;
@@ -18,21 +24,28 @@ import shem.com.materiallogin.MaterialLoginView;
 import shem.com.materiallogin.MaterialLoginViewListener;
 
 /**
- * Created by MomxMo on 2016/3/31.
+ * Created by MomxMo on 2016/4/1.
  */
-public class Login_activity extends AppCompatActivity {
+public class LoginDialog extends Dialog {
     MaterialLoginView login;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-
-        initView();
+    Activity context;
+    public LoginDialog(Activity context) {
+        super(context,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        this.context = context;
+        initView(context);
         initEvent();
     }
 
-    private void initView() {
+    private void initView(Context context) {
+        View view = View.inflate(context, R.layout.login, null);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
+        Window window = getWindow();
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        addContentView(view, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
         login = (MaterialLoginView) findViewById(R.id.login);
     }
 
@@ -81,13 +94,13 @@ public class Login_activity extends AppCompatActivity {
                 }
                 loginPass.setError("");
 
-                Log.d("用户名和密码：", userName+" ： "+password);
+                Log.d("用户名和密码：", userName + " ： " + password);
 
                 EMChatManager.getInstance().login(userName, password, new EMCallBack() {//回调
                     @Override
                     public void onSuccess() {
                         Snackbar.make(login, "登入成功!", Snackbar.LENGTH_LONG).show();
-                        runOnUiThread(new Runnable() {
+                        context.runOnUiThread(new Runnable() {
                             public void run() {
                                 EMGroupManager.getInstance().loadAllGroups();
                                 EMChatManager.getInstance().loadAllConversations();
@@ -128,42 +141,16 @@ public class Login_activity extends AppCompatActivity {
                     //注册失败
                     int errorCode=e.getErrorCode();
                     if(errorCode== EMError.NONETWORK_ERROR){
-                        Toast.makeText(getApplicationContext(), "网络异常，请检查网络！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "网络异常，请检查网络！", Toast.LENGTH_SHORT).show();
                     }else if(errorCode==EMError.USER_ALREADY_EXISTS){
-                        Toast.makeText(getApplicationContext(), "用户已存在！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "用户已存在！", Toast.LENGTH_SHORT).show();
                     }else if(errorCode==EMError.UNAUTHORIZED){
-                        Toast.makeText(getApplicationContext(), "注册失败，无权限！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "注册失败，无权限！", Toast.LENGTH_SHORT).show();
                     }else{
-                        Toast.makeText(getApplicationContext(), "注册失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "注册失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }}).start();
     }
-//
-//    private class MyConnectionListener implements EMConnectionListener {
-//        @Override
-//        public void onConnected() {
-//            //已连接到服务器
-//        }
-//
-//        @Override
-//        public void onDisconnected(final int error) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (error == EMError.USER_REMOVED) {
-//                        // 显示帐号已经被移除
-//                    } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-//                        // 显示帐号在其他设备登陆
-//                    } else {
-//                        if (NetUtils.hasNetwork(Login_activity.this)) {
-//                            //连接不到聊天服务器
-//                        } else {
-//                            //当前网络不可用，请检查网络设置
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//    }
+
 }
