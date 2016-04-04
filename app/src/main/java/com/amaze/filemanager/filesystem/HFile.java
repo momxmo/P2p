@@ -3,11 +3,9 @@ package com.amaze.filemanager.filesystem;
 import android.content.Context;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.amaze.filemanager.utils.Futils;
 import com.amaze.filemanager.utils.Logger;
-import com.amaze.filemanager.utils.RootUtils;
 import com.stericson.RootTools.RootTools;
 
 import java.io.File;
@@ -245,7 +243,7 @@ public class HFile {
     }
 
     public ArrayList<BaseFile> listFiles(boolean rootmode) {
-        ArrayList<BaseFile> arrayList = new ArrayList<>();
+        ArrayList<BaseFile> arrayList = new ArrayList<BaseFile>();
         if (isSmb()) {
             try {
                 SmbFile smbFile = new SmbFile(path);
@@ -260,17 +258,17 @@ public class HFile {
                 }
             } catch (MalformedURLException e) {
                 if (arrayList != null) arrayList.clear();
-                else arrayList = new ArrayList<>();
+                else arrayList = new ArrayList<BaseFile>();
                 e.printStackTrace();
             } catch (SmbException e) {
                 if (arrayList != null) arrayList.clear();
-                else arrayList = new ArrayList<>();
+                else arrayList = new ArrayList<BaseFile>();
                 e.printStackTrace();
             }
         } else {
             arrayList = RootHelper.getFilesList(path, rootmode, true,null);
         }
-        if (arrayList == null) arrayList = new ArrayList<>();
+        if (arrayList == null) arrayList = new ArrayList<BaseFile>();
         return arrayList;
     }
     public String getReadablePath(String path){

@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public List<String> getStorageDirectories() {
         // Final set of paths
-        final ArrayList<String> rv = new ArrayList<>();
+        final ArrayList<String> rv = new ArrayList<String>();
         // Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
         // All Secondary SD-CARDs (all exclude primary) separated by ":"
@@ -593,11 +593,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void updateDrawer() {
-        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> list = new ArrayList<Item>();
         List<String> val = getStorageDirectories();
-        ArrayList<String[]> books = new ArrayList<>();
-        ArrayList<String[]> Servers = new ArrayList<>();
-        ArrayList<String[]> accounts = new ArrayList<>();
+        ArrayList<String[]> books = new ArrayList<String[]>();
+        ArrayList<String[]> Servers = new ArrayList<String[]>();
+        ArrayList<String[]> accounts = new ArrayList<String[]>();
         storage_count = 0;
         for (String file : val) {
             File f = new File(file);
@@ -994,7 +994,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.paste:
                 String path = ma.CURRENT_PATH;
-                ArrayList<BaseFile> arrayList = new ArrayList<>();
+                ArrayList<BaseFile> arrayList = new ArrayList<BaseFile>();
                 if (COPY_PATH != null) {
                     arrayList = COPY_PATH;
                     new CopyFileCheck(ma, path, false,mainActivity,rootmode).executeOnExecutor(AsyncTask
@@ -1217,7 +1217,7 @@ public class MainActivity extends AppCompatActivity implements
         List<String> val= DataUtils.getStorages();
         if (val == null)
             val = getStorageDirectories();
-        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> list = new ArrayList<Item>();
         storage_count = 0;
         for (String file : val) {
             File f = new File(file);

@@ -191,7 +191,7 @@ public class ZipViewer extends Fragment {
         iconskin = PreferenceUtils.getFolderColorString(Sp);
         mainActivity.findViewById(R.id.buttonbarframe).setBackgroundColor(Color.parseColor(skin));
 
-        files = new ArrayList<>();
+        files = new ArrayList<BaseFile>();
         if (savedInstanceState == null && f != null) {
             if (f.getPath().endsWith(".rar")) {
                 openmode = 1;

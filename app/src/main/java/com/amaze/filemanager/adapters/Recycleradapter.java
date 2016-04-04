@@ -23,17 +23,16 @@ import android.widget.Toast;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.fragments.Main;
 import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.ui.icons.Icons;
 import com.amaze.filemanager.ui.icons.MimeTypes;
 import com.amaze.filemanager.ui.views.RoundedImageView;
-import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.utils.DataUtils;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -676,7 +675,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                             case R.id.cpy:
                                 MainActivity MAIN_ACTIVITY=main.MAIN_ACTIVITY;
                                 main.MAIN_ACTIVITY.MOVE_PATH = null;
-                                ArrayList<BaseFile> copies = new ArrayList<>();
+                                ArrayList<BaseFile> copies = new ArrayList<BaseFile>();
                                 copies.add(rowItem.generateBaseFile());
                                 MAIN_ACTIVITY.COPY_PATH = copies;
                                 MAIN_ACTIVITY.supportInvalidateOptionsMenu();
@@ -684,7 +683,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                             case R.id.cut:
                                 MainActivity MAIN_ACTIVITY1=main.MAIN_ACTIVITY;
                                 MAIN_ACTIVITY1.COPY_PATH = null;
-                                ArrayList<BaseFile> copie = new ArrayList<>();
+                                ArrayList<BaseFile> copie = new ArrayList<BaseFile>();
                                 copie.add(rowItem.generateBaseFile());
                                 MAIN_ACTIVITY1.MOVE_PATH = copie;
                                 MAIN_ACTIVITY1.supportInvalidateOptionsMenu();

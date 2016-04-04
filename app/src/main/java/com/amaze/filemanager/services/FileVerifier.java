@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.utils.Futils;
 
@@ -20,7 +19,7 @@ import jcifs.smb.SmbException;
  * Created by arpitkh996 on 25-01-2016.
  */
 public class FileVerifier extends Thread {
-    ArrayList<FileBundle> arrayList = new ArrayList<>();
+    ArrayList<FileBundle> arrayList = new ArrayList<FileBundle>();
     Futils utils;
     Context c;
     boolean rootmode;

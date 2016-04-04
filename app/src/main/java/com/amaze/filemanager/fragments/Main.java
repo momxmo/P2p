@@ -133,7 +133,7 @@ public class Main extends android.support.v4.app.Fragment {
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public int skin_color, icon_skin_color, theme1, theme, file_count, folder_count, columns;
     public String smbPath;
-    public ArrayList<BaseFile> searchHelper = new ArrayList<>();
+    public ArrayList<BaseFile> searchHelper = new ArrayList<BaseFile>();
     public int skinselection;
     public Resources res;
     HashMap<String, Bundle> scrolls = new HashMap<String, Bundle>();
@@ -742,7 +742,7 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
                 case R.id.cpy:
                     MAIN_ACTIVITY.MOVE_PATH = null;
-                    ArrayList<BaseFile> copies = new ArrayList<>();
+                    ArrayList<BaseFile> copies = new ArrayList<BaseFile>();
                     for (int i2 = 0; i2 < plist.size(); i2++) {
                         copies.add(LIST_ELEMENTS.get(plist.get(i2)).generateBaseFile());
                     }
@@ -752,7 +752,7 @@ public class Main extends android.support.v4.app.Fragment {
                     return true;
                 case R.id.cut:
                     MAIN_ACTIVITY.COPY_PATH = null;
-                    ArrayList<BaseFile> copie = new ArrayList<>();
+                    ArrayList<BaseFile> copie = new ArrayList<BaseFile>();
                     for (int i3 = 0; i3 < plist.size(); i3++) {
                         copie.add(LIST_ELEMENTS.get(plist.get(i3)).generateBaseFile());
                     }
@@ -761,7 +761,7 @@ public class Main extends android.support.v4.app.Fragment {
                     mode.finish();
                     return true;
                 case R.id.compress:
-                    ArrayList<BaseFile> copies1 = new ArrayList<>();
+                    ArrayList<BaseFile> copies1 = new ArrayList<BaseFile>();
                     for (int i4 = 0; i4 < plist.size(); i4++) {
                         copies1.add(LIST_ELEMENTS.get(plist.get(i4)).generateBaseFile());
                     }

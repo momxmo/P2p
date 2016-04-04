@@ -12,12 +12,12 @@ import java.util.List;
 
 //Central data being used across activity,fragments and classes
 public class DataUtils {
-    public static ArrayList<String> hiddenfiles=new ArrayList<>(), gridfiles=new ArrayList<>(), listfiles=new ArrayList<>(),history=new ArrayList<>();
-    public static List<String> storages=new ArrayList<>();
+    public static ArrayList<String> hiddenfiles=new ArrayList<String>(), gridfiles=new ArrayList<String>(), listfiles=new ArrayList<String>(),history=new ArrayList<String>();
+    public static List<String> storages=new ArrayList<String>();
     public static final String DRIVE = "drive", SMB = "smb", BOOKS = "books", HISTORY = "Table1", HIDDEN = "Table2", LIST = "list", GRID = "grid";
     public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3, RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7;
-    public static ArrayList<Item> list=new ArrayList<>();
-    public static ArrayList<String[]> servers=new ArrayList<>(),books=new ArrayList<>(),accounts=new ArrayList<>();
+    public static ArrayList<Item> list=new ArrayList<Item>();
+    public static ArrayList<String[]> servers=new ArrayList<String[]>(),books=new ArrayList<String[]>(),accounts=new ArrayList<String[]>();
 
     static DataChangeListener dataChangeListener;
     public static int containsServer(String[] a){
@@ -33,14 +33,14 @@ public class DataUtils {
         return contains(a,accounts);
     }
     public static void clear(){
-        hiddenfiles=new ArrayList<>();
-        gridfiles=new ArrayList<>();
-        listfiles=new ArrayList<>();
-        history=new ArrayList<>();
-        storages=new ArrayList<>();
-        servers=new ArrayList<>();
-        books=new ArrayList<>();
-        accounts=new ArrayList<>();
+        hiddenfiles=new ArrayList<String>();
+        gridfiles=new ArrayList<String>();
+        listfiles=new ArrayList<String>();
+        history=new ArrayList<String>();
+        storages=new ArrayList<String>();
+        servers=new ArrayList<String[]>();
+        books=new ArrayList<String[]>();
+        accounts=new ArrayList<String[]>();
     }
     public static void registerOnDataChangedListener(DataChangeListener dataChangeListener){
         DataUtils.dataChangeListener=dataChangeListener;
@@ -161,7 +161,7 @@ public class DataUtils {
         DataUtils.listfiles = listfiles;
     }
     public static void clearHistory() {
-        history=new ArrayList<>();
+        history=new ArrayList<String>();
         if(dataChangeListener!=null)
             dataChangeListener.onHistoryCleared();
     }

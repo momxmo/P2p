@@ -17,7 +17,7 @@ import com.timehop.stickyheadersrecyclerview.util.OrientationProvider;
 public class StickyRecyclerHeadersDecoration extends RecyclerView.ItemDecoration {
 
   private final StickyRecyclerHeadersAdapter mAdapter;
-  private final SparseArray<Rect> mHeaderRects = new SparseArray<>();
+  private final SparseArray<Rect> mHeaderRects = new SparseArray<Rect>();
   private final HeaderProvider mHeaderProvider;
   private final OrientationProvider mOrientationProvider;
   private final HeaderPositionCalculator mHeaderPositionCalculator;

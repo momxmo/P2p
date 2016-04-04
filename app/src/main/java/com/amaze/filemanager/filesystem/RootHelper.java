@@ -21,8 +21,6 @@ package com.amaze.filemanager.filesystem;
 
 import android.util.Log;
 
-import com.amaze.filemanager.filesystem.BaseFile;
-import com.amaze.filemanager.filesystem.HFile;
 import com.amaze.filemanager.utils.Futils;
 import com.stericson.RootTools.RootTools;
 import com.stericson.RootTools.execution.Command;
@@ -165,7 +163,7 @@ public class RootHelper {
     private static final String UNIX_ESCAPE_EXPRESSION = "(\\(|\\)|\\[|\\]|\\s|\'|\"|`|\\{|\\}|&|\\\\|\\?)";
     public static ArrayList<BaseFile> getFilesList(String path, boolean showHidden) {
         File f = new File(path);
-        ArrayList<BaseFile> files = new ArrayList<>();
+        ArrayList<BaseFile> files = new ArrayList<BaseFile>();
         try {
             if (f.exists() && f.isDirectory()) {
                 for (File x : f.listFiles()) {
@@ -280,8 +278,8 @@ public class RootHelper {
         int mode=0;
         if (showHidden) p = "a ";
         Futils futils = new Futils();
-        ArrayList<BaseFile> a = new ArrayList<>();
-        ArrayList<String> ls = new ArrayList<>();
+        ArrayList<BaseFile> a = new ArrayList<BaseFile>();
+        ArrayList<String> ls = new ArrayList<String>();
         if (root) {
             if (!path.startsWith("/storage") && !path.startsWith("/sdcard")) {
                 String cpath = getCommandLineString(path);
@@ -314,14 +312,14 @@ public class RootHelper {
                 mode=0;
             } else {
                 mode=0;
-                a = new ArrayList<>();
+                a = new ArrayList<BaseFile>();
             }
         } else if (futils.canListFiles(new File(path))) {
             a = getFilesList( path, showHidden);
             mode=0;
         } else {
             mode=0;
-            a = new ArrayList<>();
+            a = new ArrayList<BaseFile>();
         }
         if (a.size() == 0 && futils.canListFiles(new File(path))) {
             a = getFilesList( path, showHidden);

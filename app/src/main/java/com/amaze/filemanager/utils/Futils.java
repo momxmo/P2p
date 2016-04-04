@@ -493,7 +493,7 @@ public void openWith(final File f,final Context c) {
         final MaterialDialog.Builder c = new MaterialDialog.Builder(b.getActivity());
         c.title(getString(b.getActivity(), R.string.confirm));
         String names = "";
-        final ArrayList<BaseFile> todelete = new ArrayList<>();
+        final ArrayList<BaseFile> todelete = new ArrayList<BaseFile>();
         for (int i = 0; i < pos.size(); i++) {
             todelete.add(a.get(pos.get(i)).generateBaseFile());
             names = names + "\n" + (i + 1) + ". " + a.get(pos.get(i)).getTitle();
@@ -907,7 +907,7 @@ public void showPackageDialog(final File f,final MainActivity m){
         return b;
     }
     public ArrayList<HFile> toHFileArray(ArrayList<String> a) {
-        ArrayList<HFile> b = new ArrayList<>();
+        ArrayList<HFile> b = new ArrayList<HFile>();
         for (int i = 0; i < a.size(); i++) {
             HFile hFile=new HFile(HFile.UNKNOWN,a.get(i));
             hFile.generateMode(null);

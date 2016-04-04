@@ -150,7 +150,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                try {
                    if (arrayList != null)
                        list = addTo(arrayList);
-                   else return new ArrayList<>();
+                   else return new ArrayList<Layoutelements>();
                } catch (Exception e) {
                }
            } else {
@@ -242,7 +242,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
                 null,
                 null);
 
-        ArrayList<BaseFile> songs = new ArrayList<>();
+        ArrayList<BaseFile> songs = new ArrayList<BaseFile>();
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             do {
                 String path = cursor.getString(cursor.getColumnIndex
@@ -256,7 +256,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
     }
 
     ArrayList<BaseFile> listImages() {
-        ArrayList<BaseFile> songs = new ArrayList<>();
+        ArrayList<BaseFile> songs = new ArrayList<BaseFile>();
         final String[] projection = {MediaStore.Images.Media.DATA};
         final Cursor cursor = c.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
@@ -276,7 +276,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
     }
 
     ArrayList<BaseFile> listVideos() {
-        ArrayList<BaseFile> songs = new ArrayList<>();
+        ArrayList<BaseFile> songs = new ArrayList<BaseFile>();
         final String[] projection = {MediaStore.Images.Media.DATA};
         final Cursor cursor = c.getContentResolver().query(MediaStore.Video.Media
                         .EXTERNAL_CONTENT_URI,
@@ -359,7 +359,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
         final HistoryManager history = new HistoryManager(c, "Table2");
         final ArrayList<String> paths = history.readTable(DataUtils.HISTORY);
         history.end();
-        ArrayList<BaseFile> songs = new ArrayList<>();
+        ArrayList<BaseFile> songs = new ArrayList<BaseFile>();
         for (String f : paths) {
             if (!f.equals("/")) {
                 BaseFile a = RootHelper.generateBaseFile(new File(f), ma.SHOW_HIDDEN);
@@ -372,7 +372,7 @@ public class LoadList extends AsyncTask<String, String, ArrayList<Layoutelements
     }
 
     ArrayList<BaseFile> listDocs() {
-        ArrayList<BaseFile> songs = new ArrayList<>();
+        ArrayList<BaseFile> songs = new ArrayList<BaseFile>();
         final String[] projection = {MediaStore.Files.FileColumns.DATA};
         Cursor cursor = c.getContentResolver().query(MediaStore.Files
                         .getContentUri("external"), projection,

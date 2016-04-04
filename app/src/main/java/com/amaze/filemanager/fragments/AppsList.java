@@ -24,36 +24,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
-import android.view.ActionMode;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.Theme;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.adapters.AppsAdapter;
-import com.amaze.filemanager.services.CopyService;
-import com.amaze.filemanager.services.DeleteTask;
+import com.amaze.filemanager.ui.Layoutelements;
+import com.amaze.filemanager.ui.icons.IconHolder;
 import com.amaze.filemanager.utils.FileListSorter;
 import com.amaze.filemanager.utils.Futils;
-import com.amaze.filemanager.ui.icons.IconHolder;
-import com.amaze.filemanager.ui.Layoutelements;
 import com.amaze.filemanager.utils.PreferenceUtils;
 
 import java.io.File;
@@ -67,7 +57,7 @@ public class AppsList extends ListFragment {
     AppsAdapter adapter;
 
     public SharedPreferences Sp;
-    public ArrayList<PackageInfo> c = new ArrayList<>();
+    public ArrayList<PackageInfo> c = new ArrayList<PackageInfo>();
     ListView vl;
     public IconHolder ic;
     ArrayList<Layoutelements> a = new ArrayList<Layoutelements>();
@@ -170,8 +160,8 @@ public class AppsList extends ListFragment {
             try {
                 PackageManager p = getActivity().getPackageManager();
                 List<PackageInfo> all_apps = p.getInstalledPackages(PackageManager.GET_META_DATA);
-                a = new ArrayList<>();
-                c = new ArrayList<>();
+                a = new ArrayList<Layoutelements>();
+                c = new ArrayList<PackageInfo>();
                 for (PackageInfo object : all_apps) {
                     File f=new File(object.applicationInfo.publicSourceDir);
                     a.add(new Layoutelements(ContextCompat.getDrawable(getActivity(),R.drawable.ic_doc_apk_grid), object.applicationInfo.loadLabel(p).toString(), object.applicationInfo.publicSourceDir, object.packageName, object.versionName, utils.readableFileSize(f.length()),f.length(), false, f.lastModified()+"", false));

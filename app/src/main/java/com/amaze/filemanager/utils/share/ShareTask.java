@@ -8,11 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,8 +26,8 @@ public class ShareTask extends AsyncTask<String,String,Void> {
     int theme,fab_skin;
     ArrayList<Uri> arrayList;
     ArrayList<Intent> targetShareIntents=new ArrayList<Intent>();
-    ArrayList<String> arrayList1=new ArrayList<>();
-    ArrayList<Drawable> arrayList2=new ArrayList<>();
+    ArrayList<String> arrayList1=new ArrayList<String>();
+    ArrayList<Drawable> arrayList2=new ArrayList<Drawable>();
     public ShareTask(Activity context,ArrayList<Uri> arrayList,int theme,int fab_skin){
         this.contextc=context;
         this.arrayList=arrayList;

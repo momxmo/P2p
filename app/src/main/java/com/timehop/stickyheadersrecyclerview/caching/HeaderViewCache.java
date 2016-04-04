@@ -15,7 +15,7 @@ import com.timehop.stickyheadersrecyclerview.util.OrientationProvider;
 public class HeaderViewCache implements HeaderProvider {
 
   private final StickyRecyclerHeadersAdapter mAdapter;
-  private final LongSparseArray<View> mHeaderViews = new LongSparseArray<>();
+  private final LongSparseArray<View> mHeaderViews = new LongSparseArray<View>();
   private final OrientationProvider mOrientationProvider;
 
   public HeaderViewCache(StickyRecyclerHeadersAdapter adapter,

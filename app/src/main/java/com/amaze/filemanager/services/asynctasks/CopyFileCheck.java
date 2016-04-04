@@ -49,9 +49,9 @@ public class CopyFileCheck extends AsyncTask<ArrayList<BaseFile>, String, ArrayL
         openMode=ma.openMode;
         utils=new Futils();
         this.rootmode=rootMode;
-        a = new ArrayList<>();
-        b = new ArrayList<>();
-        lol = new ArrayList<>();
+        a = new ArrayList<BaseFile>();
+        b = new ArrayList<BaseFile>();
+        lol = new ArrayList<BaseFile>();
     }
 
     @Override

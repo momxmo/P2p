@@ -131,7 +131,7 @@ public class TextReader extends AppCompatActivity
         theme = Integer.parseInt(Sp.getString("theme", "0"));
         theme1 = theme == 2 ? PreferenceUtils.hourOfDay() : theme;
 
-        nodes = new ArrayList<>();
+        nodes = new ArrayList<MapEntry>();
 
         // setting accent theme
         if (Build.VERSION.SDK_INT >= 21) {

@@ -23,18 +23,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -43,11 +40,11 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.RegisterCallback;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.BaseFile;
+import com.amaze.filemanager.filesystem.HFile;
+import com.amaze.filemanager.filesystem.RootHelper;
 import com.amaze.filemanager.services.FileVerifier.FileVerifierInterface;
 import com.amaze.filemanager.utils.DataPackage;
 import com.amaze.filemanager.utils.Futils;
-import com.amaze.filemanager.filesystem.HFile;
-import com.amaze.filemanager.filesystem.RootHelper;
 import com.stericson.RootTools.RootTools;
 
 import java.io.BufferedInputStream;
@@ -56,13 +53,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import jcifs.smb.SmbException;
 
 public class CopyService extends Service {
     HashMap<Integer, Boolean> hash = new HashMap<Integer, Boolean>();
@@ -215,8 +208,8 @@ public class CopyService extends Service {
                     copy_successful = b;
                 }
             });
-            failedFOps=new ArrayList<>();
-            toDelete=new ArrayList<>();
+            failedFOps=new ArrayList<HFile>();
+            toDelete=new ArrayList<BaseFile>();
         }
 
         long getTotalBytes(final ArrayList<BaseFile> files) {
@@ -283,7 +276,7 @@ public class CopyService extends Service {
                     }
                 }
                 if (move && m) {
-                    ArrayList<BaseFile> toDelete=new ArrayList<>();
+                    ArrayList<BaseFile> toDelete=new ArrayList<BaseFile>();
                     for(BaseFile a:files){
                         if(!failedFOps.contains(a))
                             toDelete.add(a);
@@ -524,7 +517,7 @@ public class CopyService extends Service {
 
         @Override
         public List<DataPackage> getCurrent() throws RemoteException {
-            List<DataPackage> dataPackages=new ArrayList<>();
+            List<DataPackage> dataPackages=new ArrayList<DataPackage>();
             for (int i : hash1.keySet()) {
                dataPackages.add(hash1.get(i));
             }

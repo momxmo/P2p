@@ -253,7 +253,7 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                                                     @Override
                                                     public void onPositive(MaterialDialog materialDialog) {
 
-                                                        ArrayList<BaseFile> files = new ArrayList<>();
+                                                        ArrayList<BaseFile> files = new ArrayList<BaseFile>();
                                                         if (Build.VERSION.SDK_INT >= 21) {
                                                             String parent = f1.getParent();
                                                             if (!parent.equals("app") && !parent.equals("priv-app")){
@@ -289,7 +289,7 @@ public class AppsAdapter extends ArrayAdapter<Layoutelements> {
                             case R.id.backup:
                                 Toast.makeText(app.getActivity(), new Futils().getString(app.getActivity(), R.string.copyingapk) + Environment.getExternalStorageDirectory().getPath() + "/app_backup", Toast.LENGTH_LONG).show();
                                 File f = new File(rowItem.getDesc());
-                                ArrayList<BaseFile> ab = new ArrayList<>();
+                                ArrayList<BaseFile> ab = new ArrayList<BaseFile>();
                                 File dst = new File(Environment.getExternalStorageDirectory().getPath() + "/app_backup");
                                 if(!dst.exists() || !dst.isDirectory())dst.mkdirs();
                                 Intent intent = new Intent(app.getActivity(), CopyService.class);
