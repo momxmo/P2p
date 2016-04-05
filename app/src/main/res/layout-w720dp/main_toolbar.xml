@@ -228,19 +228,20 @@
                 fab:fab_label="@string/file" />
 
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/menu_item4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/login72"
-                fab:fab_size="mini"
-                fab:fab_label="Login" />
-            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/menu_item2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_settings_remote_white_48dp"
                 fab:fab_size="mini"
                 fab:fab_label="@string/smb_con" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_item5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_supervisor_account_white_24dp"
+                fab:fab_size="mini"
+                fab:fab_label="Login" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/menu_item3"
