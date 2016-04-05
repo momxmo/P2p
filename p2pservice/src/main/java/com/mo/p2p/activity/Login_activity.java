@@ -139,31 +139,5 @@ public class Login_activity extends AppCompatActivity {
                 }
             }}).start();
     }
-//
-//    private class MyConnectionListener implements EMConnectionListener {
-//        @Override
-//        public void onConnected() {
-//            //已连接到服务器
-//        }
-//
-//        @Override
-//        public void onDisconnected(final int error) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (error == EMError.USER_REMOVED) {
-//                        // 显示帐号已经被移除
-//                    } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-//                        // 显示帐号在其他设备登陆
-//                    } else {
-//                        if (NetUtils.hasNetwork(Login_activity.this)) {
-//                            //连接不到聊天服务器
-//                        } else {
-//                            //当前网络不可用，请检查网络设置
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//    }
+
 }

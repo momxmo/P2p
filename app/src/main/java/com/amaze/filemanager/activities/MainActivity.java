@@ -1873,6 +1873,18 @@ public class MainActivity extends AppCompatActivity implements
                 floatingActionButton.close(true);
             }
         });
+        //登入
+        FloatingActionButton floatingActionButton5 = (FloatingActionButton) findViewById(R.id.menu_item5);
+        floatingActionButton5.setColorNormal(folderskin);
+        floatingActionButton5.setColorPressed(fabskinpressed);
+        floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivityHelper.add(4);
+                revealShow(findViewById(R.id.fab_bg), false);
+                floatingActionButton.close(true);
+            }
+        });
         final FloatingActionButton floatingActionButton4 = (FloatingActionButton) findViewById(R.id.menu_item3);
         floatingActionButton4.setColorNormal(folderskin);
         floatingActionButton4.setColorPressed(fabskinpressed);
