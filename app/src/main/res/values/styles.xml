@@ -21,6 +21,14 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#00000000</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <!-- appCompat -->
     <!-- light -->
     <style name="appCompatLight" parent="Theme.AppCompat.Light.NoActionBar">

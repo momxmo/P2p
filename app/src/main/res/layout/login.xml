@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <shem.com.materiallogin.MaterialLoginView
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:loginActionText="登入"
+        app:loginHint="用户名"
+        app:loginPasswordHint="密码"
+        app:loginTextColor="@color/material_login_register_color"
+        app:loginTitle="登入"
+        app:registerActionText="注册"
+        app:registerHint="用户名"
+        app:registerIcon="@drawable/ic_person_add_white_24dp"
+        app:registerPasswordHint="密码"
+        app:registerRepeatPasswordHint="确认密码"
+        app:registerTextColor="@color/divider"
+        app:registerTitle="欢迎加入" />
+</FrameLayout>
