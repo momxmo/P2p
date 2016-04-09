@@ -99,6 +99,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.DrawerAdapter;
 import com.amaze.filemanager.database.Tab;
 import com.amaze.filemanager.database.TabHandler;
+import com.amaze.filemanager.dialog.LoginDialog;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
@@ -156,8 +157,8 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,OnRequestPermissionsResultCallback,
-        SmbConnectionListener,DataChangeListener,BookmarkCallback,
+        GoogleApiClient.OnConnectionFailedListener, OnRequestPermissionsResultCallback,
+        SmbConnectionListener, DataChangeListener, BookmarkCallback,
         AsyncHelper.HelperCallbacks {
 
     final Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements
         mainActivityHelper = new MainActivityHelper(this);
         initialiseFab();
 
-        if(mAsyncHelperFragment!=null) {
+        if (mAsyncHelperFragment != null) {
 
             FragmentManager fm = getSupportFragmentManager();
             mAsyncHelperFragment = (AsyncHelper) fm.findFragmentByTag(TAG_ASYNC_HELPER);
@@ -356,17 +357,16 @@ public class MainActivity extends AppCompatActivity implements
                 transaction.commit();
                 supportInvalidateOptionsMenu();
             } else {
-                if (path != null && path.length() > 0){
-                    HFile file = new HFile(HFile.UNKNOWN,path);
+                if (path != null && path.length() > 0) {
+                    HFile file = new HFile(HFile.UNKNOWN, path);
                     file.generateMode(this);
-                    if(file.isDirectory())
-                    goToMain(path);
-                    else{
+                    if (file.isDirectory())
+                        goToMain(path);
+                    else {
                         goToMain("");
                         utils.openFile(new File(path), this);
                     }
-                }
-                else {
+                } else {
                     goToMain("");
 
                 }
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Returns all available SD-Cards in the system (include emulated)
-     * <p>
+     * <p/>
      * Warning: Hack! Based on Android source code of version 4.3 (API 18)
      * Because there is no standard way to get it.
      * TODO: Test on future Android versions 4.4+
@@ -489,13 +489,13 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkStoragePermission())
             rv.clear();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-        String strings[] = FileUtil.getExtSdCardPathsForActivity(this);
-        for (String s : strings) {
-            File f = new File(s);
-            if (!rv.contains(s) && utils.canListFiles(f))
-                rv.add(s);
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String strings[] = FileUtil.getExtSdCardPathsForActivity(this);
+            for (String s : strings) {
+                File f = new File(s);
+                if (!rv.contains(s) && utils.canListFiles(f))
+                    rv.add(s);
+            }
         }
         rootmode = Sp.getBoolean("rootmode", false);
         if (rootmode)
@@ -728,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void selectItem(final int i) {
-        ArrayList<Item> list= DataUtils.getList();
+        ArrayList<Item> list = DataUtils.getList();
         if (!list.get(i).isSection())
             if ((select == null || select >= list.size())) {
 
@@ -904,28 +904,28 @@ public class MainActivity extends AppCompatActivity implements
         // Handle action buttons
         Main ma = null;
         try {
-            TabFragment tabFragment=getFragment();
-            if(tabFragment!=null)
-            ma = (Main)tabFragment .getTab();
+            TabFragment tabFragment = getFragment();
+            if (tabFragment != null)
+                ma = (Main) tabFragment.getTab();
         } catch (Exception e) {
         }
         switch (item.getItemId()) {
             case R.id.home:
-                if(ma!=null)
-                ma.home();
+                if (ma != null)
+                    ma.home();
                 break;
             case R.id.history:
-                if(ma!=null)
-                utils.showHistoryDialog(ma);
+                if (ma != null)
+                    utils.showHistoryDialog(ma);
                 break;
             case R.id.sethome:
-                if(ma==null)return super.onOptionsItemSelected(item);
+                if (ma == null) return super.onOptionsItemSelected(item);
                 final Main main = ma;
                 if (main.openMode != 0 || main.openMode != 3) {
                     Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
                     break;
                 }
-                final MaterialDialog b = utils.showBasicDialog(mainActivity,fabskin,theme1, new String[]{getResources().getString(R.string.questionset), getResources().getString(R.string.setashome), getResources().getString(R.string.yes), getResources().getString(R.string.no), null});
+                final MaterialDialog b = utils.showBasicDialog(mainActivity, fabskin, theme1, new String[]{getResources().getString(R.string.questionset), getResources().getString(R.string.setashome), getResources().getString(R.string.yes), getResources().getString(R.string.no), null});
                 b.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -947,11 +947,11 @@ public class MainActivity extends AppCompatActivity implements
 
                 break;
             case R.id.sortby:
-                if(ma!=null)
+                if (ma != null)
                     utils.showSortDialog(ma);
                 break;
             case R.id.dsort:
-                if(ma==null) return super.onOptionsItemSelected(item);
+                if (ma == null) return super.onOptionsItemSelected(item);
                 String[] sort = getResources().getStringArray(R.array.directorysortmode);
                 MaterialDialog.Builder a = new MaterialDialog.Builder(mainActivity);
                 if (theme == 1) a.theme(Theme.DARK);
@@ -976,12 +976,12 @@ public class MainActivity extends AppCompatActivity implements
                         DataUtils.listfiles.remove(ma.CURRENT_PATH);
                         grid.removePath(ma.CURRENT_PATH, DataUtils.LIST);
                     }
-                    grid.addPath(null, ma.CURRENT_PATH, DataUtils. GRID, 0);
+                    grid.addPath(null, ma.CURRENT_PATH, DataUtils.GRID, 0);
                     DataUtils.gridfiles.add(ma.CURRENT_PATH);
                 } else {
                     if (DataUtils.gridfiles.contains(ma.CURRENT_PATH)) {
                         DataUtils.gridfiles.remove(ma.CURRENT_PATH);
-                        grid.removePath(ma.CURRENT_PATH, DataUtils. GRID);
+                        grid.removePath(ma.CURRENT_PATH, DataUtils.GRID);
                     }
                     grid.addPath(null, ma.CURRENT_PATH, DataUtils.LIST, 0);
                     DataUtils.listfiles.add(ma.CURRENT_PATH);
@@ -997,11 +997,11 @@ public class MainActivity extends AppCompatActivity implements
                 ArrayList<BaseFile> arrayList = new ArrayList<BaseFile>();
                 if (COPY_PATH != null) {
                     arrayList = COPY_PATH;
-                    new CopyFileCheck(ma, path, false,mainActivity,rootmode).executeOnExecutor(AsyncTask
+                    new CopyFileCheck(ma, path, false, mainActivity, rootmode).executeOnExecutor(AsyncTask
                             .THREAD_POOL_EXECUTOR, arrayList);
                 } else if (MOVE_PATH != null) {
                     arrayList = MOVE_PATH;
-                    new CopyFileCheck(ma, path, true,mainActivity,rootmode).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                    new CopyFileCheck(ma, path, true, mainActivity, rootmode).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
                             arrayList);
                 }
                 COPY_PATH = null;
@@ -1042,7 +1042,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent i = new Intent();
         i.setClassName("com.amaze.filemanager.driveplugin", "com.amaze.filemanager.driveplugin.MainService");
         try {
-            bindService((i), mConnection, Context.BIND_AUTO_CREATE);
+            bindService(i, mConnection, Context.BIND_AUTO_CREATE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1152,8 +1152,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void updatepaths(int pos) {
-            TabFragment tabFragment=getFragment();
-            if(tabFragment!=null)
+        TabFragment tabFragment = getFragment();
+        if (tabFragment != null)
             tabFragment.updatepaths(pos);
     }
 
@@ -1214,7 +1214,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void refreshDrawer() {
-        List<String> val= DataUtils.getStorages();
+        List<String> val = DataUtils.getStorages();
         if (val == null)
             val = getStorageDirectories();
         ArrayList<Item> list = new ArrayList<Item>();
@@ -1237,15 +1237,15 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         list.add(new SectionItem());
-        ArrayList<String[]> Servers= DataUtils.getServers();
-        if (Servers!=null && Servers.size() > 0) {
+        ArrayList<String[]> Servers = DataUtils.getServers();
+        if (Servers != null && Servers.size() > 0) {
             for (String[] file : Servers) {
                 list.add(new EntryItem(file[0], file[1], ContextCompat.getDrawable(this, R.drawable.ic_settings_remote_white_48dp)));
             }
 
             list.add(new SectionItem());
         }
-        ArrayList<String[]> accounts= DataUtils.getAccounts();
+        ArrayList<String[]> accounts = DataUtils.getAccounts();
         if (accounts != null && accounts.size() > 0) {
             for (String[] file : accounts) {
                 list.add(new EntryItem(file[0], file[1], ContextCompat.getDrawable(this, R.drawable.drive)));
@@ -1253,7 +1253,7 @@ public class MainActivity extends AppCompatActivity implements
 
             list.add(new SectionItem());
         }
-        ArrayList<String[]> books= DataUtils.getBooks();
+        ArrayList<String[]> books = DataUtils.getBooks();
         if (books != null && books.size() > 0) {
 
             for (String[] file : books) {
@@ -1472,20 +1472,20 @@ public class MainActivity extends AppCompatActivity implements
                     startService(intent1);
                     break;
                 case DataUtils.MOVE://moving
-                    new MoveFiles((oparrayList), ((Main) getFragment().getTab()), ((Main) getFragment().getTab()).getActivity(),0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path);
+                    new MoveFiles((oparrayList), ((Main) getFragment().getTab()), ((Main) getFragment().getTab()).getActivity(), 0).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path);
                     break;
                 case DataUtils.NEW_FOLDER://mkdir
                     Main ma1 = ((Main) getFragment().getTab());
                     mainActivityHelper.mkDir(RootHelper.generateBaseFile(new File(oppathe), true), ma1);
                     break;
                 case DataUtils.RENAME:
-                    mainActivityHelper.rename(HFile.LOCAL_MODE,(oppathe), (oppathe1),mainActivity,rootmode);
+                    mainActivityHelper.rename(HFile.LOCAL_MODE, (oppathe), (oppathe1), mainActivity, rootmode);
                     Main ma2 = ((Main) getFragment().getTab());
                     ma2.updateList();
                     break;
                 case DataUtils.NEW_FILE:
                     Main ma3 = ((Main) getFragment().getTab());
-                    mainActivityHelper.mkFile(new HFile(HFile.LOCAL_MODE,oppathe), ma3);
+                    mainActivityHelper.mkFile(new HFile(HFile.LOCAL_MODE, oppathe), ma3);
 
                     break;
                 case DataUtils.EXTRACT:
@@ -1617,8 +1617,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     boolean isStorage(String path) {
-        List<String> val= DataUtils.getStorages();
-        for (String s:val)
+        List<String> val = DataUtils.getStorages();
+        for (String s : val)
             if (s.equals(path)) return true;
         return false;
     }
@@ -1883,6 +1883,10 @@ public class MainActivity extends AppCompatActivity implements
                 mainActivityHelper.add(4);
                 revealShow(findViewById(R.id.fab_bg), false);
                 floatingActionButton.close(true);
+
+                //实现登入功能
+                LoginDialog loginDialog = new LoginDialog(MainActivity.this);
+                loginDialog.show();
             }
         });
         final FloatingActionButton floatingActionButton4 = (FloatingActionButton) findViewById(R.id.menu_item3);
@@ -2425,9 +2429,9 @@ public class MainActivity extends AppCompatActivity implements
 
     public void renameBookmark(final String title, final String path) {
         if (DataUtils.containsBooks(new String[]{title, path}) != -1 || DataUtils.containsAccounts(new String[]{title, path}) != -1) {
-            RenameBookmark renameBookmark= RenameBookmark.getInstance(title, path, fabskin, theme1);
-            if(renameBookmark!=null){
-                renameBookmark.show(getFragmentManager(),"renamedialog");
+            RenameBookmark renameBookmark = RenameBookmark.getInstance(title, path, fabskin, theme1);
+            if (renameBookmark != null) {
+                renameBookmark.show(getFragmentManager(), "renamedialog");
             }
         }
     }
@@ -2440,7 +2444,7 @@ public class MainActivity extends AppCompatActivity implements
         if (pending_path != null) {
             try {
 
-                HFile hFile = new HFile(HFile.UNKNOWN,pending_path);
+                HFile hFile = new HFile(HFile.UNKNOWN, pending_path);
                 hFile.generateMode(this);
                 if (hFile.isSimpleFile()) {
                     utils.openFile(new File(pending_path), mainActivity);
@@ -2448,7 +2452,7 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 TabFragment m = getFragment();
-                if(m==null){
+                if (m == null) {
                     goToMain(pending_path);
                     return;
                 }
@@ -2694,7 +2698,7 @@ public class MainActivity extends AppCompatActivity implements
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example, if the request has been denied previously.
-            final MaterialDialog materialDialog = utils.showBasicDialog(this,fabskin,theme1, new String[]{getResources().getString(R.string.granttext), getResources().getString(R.string.grantper), getResources().getString(R.string.grant), getResources().getString(R.string.cancel), null});
+            final MaterialDialog materialDialog = utils.showBasicDialog(this, fabskin, theme1, new String[]{getResources().getString(R.string.granttext), getResources().getString(R.string.grantper), getResources().getString(R.string.grant), getResources().getString(R.string.cancel), null});
             materialDialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2717,42 +2721,44 @@ public class MainActivity extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 77);
         }
     }
-    public void showSMBDialog(String name,String path,boolean edit){
-        if(path.length()>0 && name.length()==0){
-          int i=-1;
-            if((i= DataUtils.containsServer(new String[]{name, path}))!=-1){
-                name= DataUtils.servers.get(i)[0];
+
+    public void showSMBDialog(String name, String path, boolean edit) {
+        if (path.length() > 0 && name.length() == 0) {
+            int i = -1;
+            if ((i = DataUtils.containsServer(new String[]{name, path})) != -1) {
+                name = DataUtils.servers.get(i)[0];
             }
         }
-        SmbConnectDialog smbConnectDialog=new SmbConnectDialog();
-        Bundle bundle=new Bundle();
-        bundle.putString("name",name);
-        bundle.putString("path",path);
-        bundle.putBoolean("edit",edit);
+        SmbConnectDialog smbConnectDialog = new SmbConnectDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("name", name);
+        bundle.putString("path", path);
+        bundle.putBoolean("edit", edit);
         smbConnectDialog.setArguments(bundle);
-        smbConnectDialog.show(getFragmentManager(),"smbdailog");
+        smbConnectDialog.show(getFragmentManager(), "smbdailog");
 
     }
 
     @Override
-    public void addConnection(boolean edit, String name, String path,String oldname,String oldPath) {
+    public void addConnection(boolean edit, String name, String path, String oldname, String oldPath) {
 
         try {
-            String[] s=new String[]{name,path};
+            String[] s = new String[]{name, path};
             if (!edit) {
-                TabFragment fragment=getFragment();
-                if(fragment!=null) {
-                    Fragment fragment1=fragment.getTab();
-                    if(fragment1!=null){
-                    final Main ma = (Main) fragment1;
-                    ma.loadlist(path, false, -1);
-                }}
+                TabFragment fragment = getFragment();
+                if (fragment != null) {
+                    Fragment fragment1 = fragment.getTab();
+                    if (fragment1 != null) {
+                        final Main ma = (Main) fragment1;
+                        ma.loadlist(path, false, -1);
+                    }
+                }
                 DataUtils.addServer(new String[]{name, path});
                 refreshDrawer();
                 grid.addPath(name, path, DataUtils.SMB, 1);
             } else {
-                int i=-1;
-                if ((i= DataUtils.containsServer(new String[]{oldname, oldPath})) != -1) {
+                int i = -1;
+                if ((i = DataUtils.containsServer(new String[]{oldname, oldPath})) != -1) {
                     DataUtils.removeServer(i);
                     mainActivity.grid.removePath(oldPath, DataUtils.SMB);
                 }
@@ -2768,9 +2774,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void deleteConnection(String name,String path) {
-        int i=-1;
-        if ((i= DataUtils.containsServer(new String[]{name, path})) != -1) {
+    public void deleteConnection(String name, String path) {
+        int i = -1;
+        if ((i = DataUtils.containsServer(new String[]{name, path})) != -1) {
             DataUtils.removeServer(i);
             grid.removePath(path, DataUtils.SMB);
             refreshDrawer();
@@ -2780,7 +2786,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onHiddenFileAdded(String path) {
-        history.addPath(null,path, DataUtils.HIDDEN,0);
+        history.addPath(null, path, DataUtils.HIDDEN, 0);
     }
 
     @Override
@@ -2795,8 +2801,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBookAdded(String[] path, boolean refreshdrawer) {
-        grid.addPath(path[0],path[1], DataUtils.BOOKS,1);
-        if(refreshdrawer)
+        grid.addPath(path[0], path[1], DataUtils.BOOKS, 1);
+        if (refreshdrawer)
             refreshDrawer();
     }
 
@@ -2807,7 +2813,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void delete(String title, String path) {
-        grid.removePath(title,path, DataUtils.BOOKS);
+        grid.removePath(title, path, DataUtils.BOOKS);
         refreshDrawer();
 
     }

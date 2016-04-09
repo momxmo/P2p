@@ -35,6 +35,11 @@
     <color name="divider_dark">#474747</color>
     <color name="search_text_highlight">#FF9632</color>
 
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <!-- primary color palatte -->
     <color name="primary_red">#F44336</color>
     <color name="primary_pink">#e91e63</color>
@@ -82,5 +87,7 @@
     <!-- cardview foreground and background -->
     <color name="cardView_foreground">#202020</color>
     <color name="cardView_background">#363F45</color>
+
+    <color name="rippelColor">#0099CC</color>
 
 </resources>

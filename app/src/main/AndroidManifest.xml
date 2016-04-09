@@ -35,9 +35,15 @@
         android:targetSdkVersion="21" />
 
     <application
+        android:name="com.amaze.filemanager.application.WiFiDirectApp"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         android:label="Amaze">
+
+        <!-- 设置环信应用的appkey -->
+        <meta-data android:name="p2p"  android:value="momxmo#p2p" />
+        <!-- 声明sdk所需的service SDK核心功能-->
+        <service android:name="com.easemob.chat.EMChatService" />
 
         <activity
             android:label="Amaze"
