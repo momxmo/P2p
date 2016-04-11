@@ -36,7 +36,6 @@ public class Login_activity extends AppCompatActivity {
         login = (MaterialLoginView) findViewById(R.id.login);
     }
 
-
     //实现ConnectionListener接口
     private void initEvent() {
         login.setListener(new MaterialLoginViewListener() {
