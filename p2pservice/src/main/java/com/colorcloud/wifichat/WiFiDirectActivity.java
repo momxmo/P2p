@@ -256,7 +256,6 @@ public class WiFiDirectActivity extends AppCompatActivity implements DeviceActio
             	L.d(TAG, "onOptionsItemSelected : login ");
                 LoginDialog loginDialog = new LoginDialog(WiFiDirectActivity.this);
                 loginDialog.show();
-
                 return true;
 
             default:
