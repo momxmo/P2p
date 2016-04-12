@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/P2p.iml" filepath="$PROJECT_DIR$/P2p.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/driveplugin/driveplugin.iml" filepath="$PROJECT_DIR$/driveplugin/driveplugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/driveplugin/driveplugin.iml" filepath="$PROJECT_DIR$/driveplugin/driveplugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/p2pservice/p2pservice.iml" filepath="$PROJECT_DIR$/p2pservice/p2pservice.iml" />
     </modules>
   </component>

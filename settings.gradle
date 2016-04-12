@@ -1,1 +1,1 @@
-include ':app', ':p2pservice', ':driveplugin'
+include ':driveplugin', ':app', ':p2pservice'
