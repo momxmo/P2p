@@ -1495,6 +1495,11 @@ public class MainActivity extends AppCompatActivity implements
                     mainActivityHelper.compressFiles(new File(oppathe), oparrayList);
             }
             operation = -1;
+        } else if (requestCode == 4) {  //登入返回结果
+
+            if (responseCode) {
+
+            }
         }
     }
 
@@ -1885,8 +1890,11 @@ public class MainActivity extends AppCompatActivity implements
                 floatingActionButton.close(true);
 
                 //实现登入功能
-                LoginDialog loginDialog = new LoginDialog(MainActivity.this);
-                loginDialog.show();
+//                LoginDialog loginDialog = new LoginDialog(MainActivity.this);
+//                loginDialog.show();
+
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, 4);
             }
         });
         final FloatingActionButton floatingActionButton4 = (FloatingActionButton) findViewById(R.id.menu_item3);
@@ -2140,6 +2148,7 @@ public class MainActivity extends AppCompatActivity implements
             }).setStartDelay(PATH_ANIM_START_DELAY).start();
         }
     }
+
 
     public int dpToPx(double dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();

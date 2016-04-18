@@ -1,8 +1,8 @@
-package com.amaze.filemanager.dialog;
+package com.amaze.filemanager.activities;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
@@ -24,16 +24,17 @@ import shem.com.materiallogin.MaterialLoginView;
 import shem.com.materiallogin.MaterialLoginViewListener;
 
 /**
- * Created by MomxMo on 2016/4/1.
+ * A login screen that offers login via email/password.
  */
-public class LoginDialog extends Dialog {
+public class LoginActivity extends Activity {
     MaterialLoginView login;
-
     Activity context;
 
-    public LoginDialog(Activity context) {
-        super(context, R.style.AppTheme);
-        this.context = context;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        context = this;
         initView(context);
         initEvent();
     }
@@ -41,13 +42,10 @@ public class LoginDialog extends Dialog {
     private void initView(Context context) {
         View view = View.inflate(context, R.layout.login, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setCancelable(false);
-        setCanceledOnTouchOutside(true);
         Window window = getWindow();
         window.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.login_bg));
         addContentView(view, new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
         login = (MaterialLoginView) findViewById(R.id.login);
     }
 
@@ -56,7 +54,7 @@ public class LoginDialog extends Dialog {
     private void initEvent() {
         login.setListener(new MaterialLoginViewListener() {
             TextInputLayout loginPass;
-            Handler handler = new Handler(){
+            Handler handler = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
                     super.handleMessage(msg);
@@ -149,7 +147,6 @@ public class LoginDialog extends Dialog {
     }
 
 
-
     /**
      * 注册
      *
@@ -180,3 +177,4 @@ public class LoginDialog extends Dialog {
     }
 
 }
+
