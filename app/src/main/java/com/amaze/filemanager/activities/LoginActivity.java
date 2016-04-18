@@ -1,16 +1,13 @@
 package com.amaze.filemanager.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.amaze.filemanager.R;
@@ -26,28 +23,22 @@ import shem.com.materiallogin.MaterialLoginViewListener;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
     MaterialLoginView login;
     Activity context;
+
+    public final static int LOGIN_SUCCESS =0;
+    public final static int LOGIN_FAILURE =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         context = this;
-        initView(context);
+        login = (MaterialLoginView) findViewById(R.id.login);
         initEvent();
     }
 
-    private void initView(Context context) {
-        View view = View.inflate(context, R.layout.login, null);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Window window = getWindow();
-        window.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.login_bg));
-        addContentView(view, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        login = (MaterialLoginView) findViewById(R.id.login);
-    }
 
 
     //实现ConnectionListener接口
@@ -123,6 +114,9 @@ public class LoginActivity extends Activity {
                                 Log.d("main", "登陆聊天服务器成功！");
                             }
                         });
+
+                        setResult(LOGIN_SUCCESS);
+                        finish();
                     }
 
                     @Override
@@ -134,7 +128,7 @@ public class LoginActivity extends Activity {
                     public void onError(int code, String message) {
 //                        loginPass.setError("密码错误");
                         Message message1 = handler.obtainMessage();
-                        message1.obj = "密码错误";
+                        message1.obj = "用户名或密码错误";
                         message1.what = 1;
                         handler.sendMessage(message1);
                         Log.d("main", "登陆聊天服务器失败！");

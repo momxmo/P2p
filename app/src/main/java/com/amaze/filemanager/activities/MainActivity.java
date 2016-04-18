@@ -99,7 +99,6 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.adapters.DrawerAdapter;
 import com.amaze.filemanager.database.Tab;
 import com.amaze.filemanager.database.TabHandler;
-import com.amaze.filemanager.dialog.LoginDialog;
 import com.amaze.filemanager.filesystem.BaseFile;
 import com.amaze.filemanager.filesystem.FileUtil;
 import com.amaze.filemanager.filesystem.HFile;
@@ -144,6 +143,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.L;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.stericson.RootTools.RootTools;
 
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements
         SmbConnectionListener, DataChangeListener, BookmarkCallback,
         AsyncHelper.HelperCallbacks {
 
+    private static final String TAG = "MainActivity";
     final Pattern DIR_SEPARATOR = Pattern.compile("/");
     /* Request code used to invoke sign in user interactions. */
     static final int RC_SIGN_IN = 0;
@@ -1497,8 +1498,9 @@ public class MainActivity extends AppCompatActivity implements
             operation = -1;
         } else if (requestCode == 4) {  //登入返回结果
 
-            if (responseCode) {
+            if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
 
+                L.d(TAG, "登入成功");
             }
         }
     }
