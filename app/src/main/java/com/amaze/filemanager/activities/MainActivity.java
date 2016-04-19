@@ -410,7 +410,8 @@ public class MainActivity extends AppCompatActivity implements
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
             mDrawerToggle.syncState();
-        }/*((ImageButton) findViewById(R.id.drawer_buttton)).setOnClickListener(new ImageView.OnClickListener() {
+        }
+       /* ((ImageButton) findViewById(R.id.drawer_buttton)).setOnClickListener(new ImageView.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mDrawerLayout.isDrawerOpen(mDrawerLinear)) {
@@ -791,7 +792,7 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
         if (f.contains("TabFragment")) {
-            setActionBarTitle("Amaze");
+            setActionBarTitle("Wifi-T");
             if (aBoolean) {
                 s.setTitle(getResources().getString(R.string.gridview));
             } else {
@@ -1497,11 +1498,11 @@ public class MainActivity extends AppCompatActivity implements
             }
             operation = -1;
         } else if (requestCode == 4) {  //登入返回结果
+        }
 
-            if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
+        if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
 
-                L.d(TAG, "登入成功");
-            }
+            L.d(TAG, "登入成功");
         }
     }
 
