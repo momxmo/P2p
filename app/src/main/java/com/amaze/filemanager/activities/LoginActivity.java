@@ -20,6 +20,8 @@ import com.easemob.exceptions.EaseMobException;
 import shem.com.materiallogin.MaterialLoginView;
 import shem.com.materiallogin.MaterialLoginViewListener;
 
+//http://svn.oa.com:24399/131svnroot/kk/apps
+
 /**
  * A login screen that offers login via email/password.
  */

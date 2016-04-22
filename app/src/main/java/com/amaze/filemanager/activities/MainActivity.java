@@ -1498,11 +1498,9 @@ public class MainActivity extends AppCompatActivity implements
             }
             operation = -1;
         } else if (requestCode == 4) {  //登入返回结果
-        }
-
-        if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
-
-            L.d(TAG, "登入成功");
+            if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
+                Log.d(TAG, "登入成功");
+            }
         }
     }
 

@@ -8,13 +8,11 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-
 repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
 }
-
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
@@ -33,7 +31,7 @@ android {
     defaultConfig {
         applicationId "com.amaze.filemanager"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 17
         versionCode 31
         versionName "3.0.1"
         multiDexEnabled true
@@ -132,11 +130,8 @@ android {
 
     }
 }
-
-
 def Properties props = new Properties()
 def propFile = new File('signing.properties')
-
 if (propFile.canRead()) {
     props.load(new FileInputStream(propFile))
 
@@ -156,4 +151,6 @@ if (propFile.canRead()) {
 } else {
     println 'signing.properties not found'
     android.buildTypes.release.signingConfig = null
+}
+dependencies {
 }
