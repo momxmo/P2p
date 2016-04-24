@@ -117,6 +117,7 @@
     <string name="history">History</string>
     <string name="refresh">Refresh</string>
     <string name="copy">Copy</string>
+    <string name="send">Send</string>
     <string name="rootmode">Root Explorer</string>
     <string name="rootmodesummary">For rooted device only. Check it only if you are sure about it.</string>
     <string name="mountsystemsummary">Enable this if you want to edit System Files</string>
@@ -401,5 +402,12 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="connecting_device">正在连接设备</string>
+    <string name="connect_failed">连接设备失败</string>
+    <string name="connect_successed">连接设备成功</string>
+    <string name="searching_hit">正在搜索设备,请在另外一台手机上进入此界面搜索</string>
+    <string name="server">服务端、</string>
+    <string name="client">客户端</string>
+    <string name="disconnected_device">连接已断开</string>
 </resources>
 
