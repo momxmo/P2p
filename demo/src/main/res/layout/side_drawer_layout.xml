@@ -6,11 +6,9 @@
 
     <ImageView
         android:id="@+id/id_person_name"
-        android:layout_width="@dimen/person_image_width_in_side_drawer"
-        android:layout_height="@dimen/person_image_height_in_side_drawer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/person_image_margin_top_in_side_drawer"
-        android:src="@drawable/mao" />
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:src="@drawable/header" />
 
     <ImageView
         android:id="@+id/id_option_image"

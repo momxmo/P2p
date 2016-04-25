@@ -64,9 +64,11 @@ public class ContentFragment extends Fragment implements View.OnClickListener, M
         mButtomFun_fileNum = (ViewGroup) view.findViewById(R.id.lin_fun_fileNum);
         mButtomFun_send = (ViewGroup) view.findViewById(R.id.lin_fun_sendFile);
         mButtomFun_clear = (ViewGroup) view.findViewById(R.id.lin_fun_clear);
+
         mButtomFun_fileNum.setOnClickListener(this);
         mButtomFun_send.setOnClickListener(this);
         mButtomFun_clear.setOnClickListener(this);
+
         img_connect = (ImageView) view.findViewById(R.id.img_connect);
         img_connect_height = (int) BitmapUtils.dipTopx(getContext(), 55);
         img_connect.setOnClickListener(this);

@@ -317,10 +317,17 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                         f = new File(activity.getReceivedFileDirPath(),
                                 FileTypeUtils.getTypeString(activity, name) + File.separator + name);
                     } else {
-                        int index = name.indexOf(".");
-                        String name2 = name.substring(0, index) + "(" + i + ")" + name.substring(index);
-                        f = new File(activity.getReceivedFileDirPath(),
-                                FileTypeUtils.getTypeString(activity, name) + File.separator + name2);
+                        if (name.contains(".")) {
+                            int index = name.lastIndexOf(".");
+                            String name2 = name.substring(0, index) + "(" + i + ")" + name.substring(index);
+                            f = new File(activity.getReceivedFileDirPath(),
+                                    FileTypeUtils.getTypeString(activity, name) + File.separator + name2);
+                        } else {
+                            String name2 = name+"_"+i;
+                            f = new File(activity.getReceivedFileDirPath(),
+                                    FileTypeUtils.getTypeString(activity, name) + File.separator + name2);
+                        }
+
                     }
                     i++;
                     if (!f.exists()) {
