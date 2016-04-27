@@ -32,6 +32,7 @@ import com.amaze.filemanager.ui.icons.Icons;
 import com.amaze.filemanager.ui.icons.MimeTypes;
 import com.amaze.filemanager.ui.views.RoundedImageView;
 import com.amaze.filemanager.utils.DataUtils;
+import com.amaze.filemanager.utils.Futils;
 import com.amaze.filemanager.utils.LogUtils;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -54,6 +55,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
     int filetype = -1;
     int column, rowHeight;
     boolean topFab;
+    Futils utils;
     int grey_color;
     int c1, c2, c3, c4, c5, c6, c7, c8, c9, anim;
 
@@ -61,6 +63,7 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
         this.main = m;
         this.items = items;
         this.context = context;
+        utils = new Futils();
         for (int i = 0; i < items.size(); i++) {
             myChecked.put(i, false);
             myanim.put(i, false);
@@ -718,23 +721,8 @@ public class Recycleradapter extends RecyclerArrayAdapter<String, RecyclerView.V
                                 Toast.makeText(main.getActivity(), main.utils.getString(main.getActivity(), R.string.bookmarksadded), Toast.LENGTH_LONG).show();
                                 return true;
                             case R.id.send:  //点击发送文件
-
                                 MainActivity activity = (MainActivity) main.getActivity();
-                                BaseFile baseFile = rowItem.generateBaseFile();
-                                LogUtils.d(TAG, "发送文件的路径是：" + baseFile.getPath());
-                                activity.addFileToSendFileList(baseFile.getPath(),null);
-                                WifiP2pHelper wifiP2pHelper = activity.getWifiP2pHelper();
-                                if (wifiP2pHelper.isConnected()) {
-                                    Log.d(WifiP2pHelper.TAG, "trying send files");
-                                    ArrayList<File> list = new ArrayList<>();
-                                    for (int i = 0; i < activity.getSendFiles().size(); i++) {
-                                        list.add(new File(activity.getSendFiles().get(i)));
-                                    }
-                                    wifiP2pHelper.sendFiles(list);
-                                    activity.clearSendFileList();
-                                } else {
-                                    activity.getDeviceConnectDialog().show();
-                                }
+                                utils.sendFiles(rowItem.generateBaseFile().getPath(),activity);
                                 return true;
                         }
                         return false;

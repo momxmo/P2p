@@ -21,56 +21,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/paste"
-        android:title="@string/paste"
         android:icon="@drawable/ic_content_paste_white_36dp"
-        app:showAsAction="always"
-        android:visible="false" />
+        android:title="@string/paste"
+        android:visible="false"
+        app:showAsAction="always" />
     <item
         android:id="@+id/search"
-        android:title="@string/search"
         android:icon="@drawable/ic_action_search"
+        android:title="@string/search"
         app:showAsAction="always" />
-    <item android:id="@+id/home"
-        android:title="@string/home"
-        app:showAsAction="ifRoom"
+    <item
+        android:id="@+id/home"
         android:icon="@drawable/ic_home_white_48dp"
-        />
+        android:title="@string/home"
+        app:showAsAction="ifRoom" />
 
     <item
-        app:showAsAction="ifRoom"
         android:id="@+id/item10"
+        android:icon="@drawable/ic_sort_white_48dp"
         android:title="@string/sort"
-        android:icon="@drawable/ic_sort_white_48dp">
-        <menu >
-            <item android:title="@string/sortby"
-                android:id="@+id/sortby"/>
-            <item android:title="@string/directorysort"
-                android:id="@+id/dsort"/>
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/sortby"
+                android:title="@string/sortby" />
+            <item
+                android:id="@+id/dsort"
+                android:title="@string/directorysort" />
         </menu>
 
     </item>
-    <item android:id="@+id/history"
-        android:icon="@drawable/ic_history_white_48dp"
-        app:showAsAction="ifRoom"
-        android:title="@string/history"
-/>
     <item
-        android:id="@+id/view" />
+        android:id="@+id/history"
+        android:icon="@drawable/ic_history_white_48dp"
+        android:title="@string/history"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/view" />
     <item
         android:id="@+id/hiddenitems"
-        android:visible="false"
-        android:title="@string/hiddenfiles" />
+        android:title="@string/hiddenfiles"
+        android:visible="false" />
     <item
         android:id="@+id/sethome"
-        android:title="@string/setashome"/>
+        android:title="@string/setashome" />
     <item
         android:id="@+id/extract"
         android:title="@string/extract"
-        android:visible="false"/>
+        android:visible="false" />
 
     <item
         android:id="@+id/item3"
-        android:title="@string/exit"
-        android:icon="@drawable/ic_action_cancel_light" />
+        android:icon="@drawable/ic_action_cancel_light"
+        android:title="@string/exit" />
 
 </menu>

@@ -695,7 +695,6 @@ public class Main extends android.support.v4.app.Fragment {
                 case R.id.delete:
                     utils.deleteFiles(LIST_ELEMENTS, ma, plist);
 
-
                     return true;
                 case R.id.share:
                     ArrayList<File> arrayList = new ArrayList<File>();
@@ -708,6 +707,21 @@ public class Main extends android.support.v4.app.Fragment {
                         utils.shareFiles(arrayList, getActivity(), theme1, Color.parseColor
                                 (fabSkin));
                     return true;
+
+
+                case R.id.send:
+                    ArrayList<File> sendList = new ArrayList<File>();
+                    for (int i : plist) {
+                        sendList.add(new File(LIST_ELEMENTS.get(i).getDesc()));
+                    }
+                    for (File file : sendList) {
+                        if (file.exists() && !file.isDirectory()) {
+                            utils.sendFiles(file.getPath(), MAIN_ACTIVITY);
+                        }
+                    }
+                    mode.finish();
+                    return true;
+
                 case R.id.openparent:
                     loadlist(new File(LIST_ELEMENTS.get(plist.get(0)).getDesc()).getParent(), false, 0);
                     return true;
