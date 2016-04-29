@@ -1,1 +1,1 @@
-include ':app', ':p2pservice', ':demo'
+include ':app', ':p2pservice', ':demo', ':easeui'
