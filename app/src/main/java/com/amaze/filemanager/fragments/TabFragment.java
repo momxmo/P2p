@@ -1,8 +1,11 @@
 package com.amaze.filemanager.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +16,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
@@ -38,7 +44,7 @@ import java.util.List;
 public class TabFragment extends android.support.v4.app.Fragment
         implements ViewPager.OnPageChangeListener {
 
-    public  List<Fragment> fragments = new ArrayList<Fragment>();
+    public List<Fragment> fragments = new ArrayList<Fragment>();
     public ScreenSlidePagerAdapter mSectionsPagerAdapter;
     Futils utils = new Futils();
     public CustomViewPager mViewPager;
@@ -58,60 +64,65 @@ public class TabFragment extends android.support.v4.app.Fragment
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.tabfragment,
                 container, false);
-        fragmentManager=getActivity().getSupportFragmentManager();
-        mToolBarContainer=getActivity().findViewById(R.id.lin);
+        fragmentManager = getActivity().getSupportFragmentManager();
+        mToolBarContainer = getActivity().findViewById(R.id.lin);
         indicator = (Indicator) getActivity().findViewById(R.id.indicator);
         Sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        savepaths=Sp.getBoolean("savepaths", true);
-        int theme=Integer.parseInt(Sp.getString("theme","0"));
-        theme1 = theme==2 ? PreferenceUtils.hourOfDay() : theme;
+        savepaths = Sp.getBoolean("savepaths", true);
+        int theme = Integer.parseInt(Sp.getString("theme", "0"));
+        theme1 = theme == 2 ? PreferenceUtils.hourOfDay() : theme;
         mViewPager = (CustomViewPager) rootView.findViewById(R.id.pager);
 
-        if (getArguments() != null){
+        if (getArguments() != null) {
             path = getArguments().getString("path");
         }
-        buttons=getActivity().findViewById(R.id.buttons);
-        mainActivity = ((MainActivity)getActivity());
+        buttons = getActivity().findViewById(R.id.buttons);
+        mainActivity = ((MainActivity) getActivity());
         mainActivity.supportInvalidateOptionsMenu();
         mViewPager.addOnPageChangeListener(this);
 
         mSectionsPagerAdapter = new ScreenSlidePagerAdapter(
                 getActivity().getSupportFragmentManager());
         if (savedInstanceState == null) {
-            int l=Sp.getInt("currenttab",1);
-            TabHandler tabHandler=new TabHandler(getActivity(),null,null,1);
-            List<Tab> tabs1=tabHandler.getAllTabs();
-            int i=tabs1.size();
-            if(i==0) {
-                if (mainActivity.storage_count>1)
-                    addTab(new Tab(1,"",((EntryItem)DataUtils.list.get(1)).getPath(),"/"),1,"");
+            int l = Sp.getInt("currenttab", 1);
+            TabHandler tabHandler = new TabHandler(getActivity(), null, null, 1);
+            List<Tab> tabs1 = tabHandler.getAllTabs();
+            int i = tabs1.size();
+            if (i == 0) {
+                if (mainActivity.storage_count > 1)
+                    addTab(new Tab(1, "", ((EntryItem) DataUtils.list.get(1)).getPath(), "/"), 1, "");
                 else
-                    addTab(new Tab(1,"","/","/"),1,"");
-                if(!DataUtils.list.get(0).isSection()){
-                    String pa=((EntryItem) DataUtils.list.get(0)).getPath();
-                    addTab(new Tab(2,"",pa,pa),2,"");}
-                else     addTab(new Tab(2,"",((EntryItem)DataUtils.list.get(1)).getPath(),"/"),2,"");
-            }
-            else{
-                if(path!=null && path.length()!=0){
-                    if(l==1)
-                        addTab(tabHandler.findTab(1),1,"");
-                    addTab(tabHandler.findTab(l+1),l+1,path);
-                    if(l==0)
-                        addTab(tabHandler.findTab(2),2,"");
+                    addTab(new Tab(1, "", "/", "/"), 1, "");
+                if (!DataUtils.list.get(0).isSection()) {
+                    String pa = ((EntryItem) DataUtils.list.get(0)).getPath();
+//                    addTab(new Tab(2, "", pa, pa), 2, "");
+                    addTabWifi();
+                } else {
+//                    addTab(new Tab(2, "", ((EntryItem) DataUtils.list.get(1)).getPath(), "/"), 2, "");
+                    addTabWifi();
                 }
-                else
-                {addTab(tabHandler.findTab(1),1,"");
-                    addTab(tabHandler.findTab(2),2,"");
+            } else {
+                if (path != null && path.length() != 0) {
+                    if (l == 1)
+                        addTab(tabHandler.findTab(1), 1, "");
+//                    addTab(tabHandler.findTab(l + 1), l + 1, path);
+                    addTabWifi();
+                    if (l == 0) {
+//                        addTab(tabHandler.findTab(2), 2, "");
+                        addTabWifi();
+                    }
+                } else {
+                    addTab(tabHandler.findTab(1), 1, "");
+//                    addTab(tabHandler.findTab(2), 2, "");
+                    addTabWifi();
                 }
             }
-
 
 
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
             try {
-                mViewPager.setCurrentItem(l,true);
+                mViewPager.setCurrentItem(l, true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -123,6 +134,7 @@ public class TabFragment extends android.support.v4.app.Fragment
                     fragmentManager = getActivity().getSupportFragmentManager();
                 fragments.add(0, fragmentManager.getFragment(savedInstanceState, "tab" + 0));
                 fragments.add(1, fragmentManager.getFragment(savedInstanceState, "tab" + 1));
+//                fragments.add(2, new HistoryFragment());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -137,7 +149,7 @@ public class TabFragment extends android.support.v4.app.Fragment
 
         indicator.setViewPager(mViewPager);
 
-        mainActivity.mainFragment = (Main) getTab();
+        mainActivity.mainFragment = (Main) getTab(0);
 
         return rootView;
     }
@@ -151,60 +163,64 @@ public class TabFragment extends android.support.v4.app.Fragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Override
-    public void onDestroyView(){
-        Sp.edit().putInt("currenttab",currenttab).apply();
+    public void onDestroyView() {
+        Sp.edit().putInt("currenttab", currenttab).apply();
         super.onDestroyView();
         try {
-            if(tabHandler!=null)
-            tabHandler.close();
+            if (tabHandler != null)
+                tabHandler.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     TabHandler tabHandler;
 
     public void updatepaths(int pos) {
-        if(tabHandler==null)
-        tabHandler = new TabHandler(getActivity(), null, null, 1);
-        int i=1;
-        ArrayList<String> items=new ArrayList<String>();
+        if (tabHandler == null)
+            tabHandler = new TabHandler(getActivity(), null, null, 1);
+        int i = 1;
+        ArrayList<String> items = new ArrayList<String>();
 
         // Getting old path from database before clearing
 
         tabHandler.clear();
-        for(Fragment fragment:fragments) {
-            if(fragment.getClass().getName().contains("Main")){
-                Main m=(Main)fragment;
-                items.add(parsePathForName(m.CURRENT_PATH,m.openMode));
-                if(i-1==currenttab && i==pos){
-                    mainActivity.updatePath(m.CURRENT_PATH,m.results,m.openMode,m
-                            .folder_count,m.file_count);
+        for (Fragment fragment : fragments) {
+            if (fragment.getClass().getName().contains("Main")) {
+                Main m = (Main) fragment;
+                items.add(parsePathForName(m.CURRENT_PATH, m.openMode));
+                if (i - 1 == currenttab && i == pos) {
+                    mainActivity.updatePath(m.CURRENT_PATH, m.results, m.openMode, m
+                            .folder_count, m.file_count);
                     mainActivity.updateDrawer(m.CURRENT_PATH);
                 }
-                if(m.openMode==0) {
+                if (m.openMode == 0) {
                     tabHandler.addTab(new Tab(i, m.CURRENT_PATH, m.CURRENT_PATH, m.home));
-                }else
+                } else
                     tabHandler.addTab(new Tab(i, m.home, m.home, m.home));
 
                 i++;
             }
         }
     }
+
     String parseSmbPath(String a) {
         if (a.contains("@"))
             return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
         else return a;
     }
-    String parsePathForName(String path,int openmode){
-        Resources resources=getActivity().getResources();
-        if("/".equals(path))
+
+    String parsePathForName(String path, int openmode) {
+        Resources resources = getActivity().getResources();
+        if ("/".equals(path))
             return resources.getString(R.string.rootdirectory);
-        else if(openmode==1 && path.startsWith("smb:/"))
+        else if (openmode == 1 && path.startsWith("smb:/"))
             return (new File(parseSmbPath(path)).getName());
-        else if("/storage/emulated/0".equals(path))
+        else if ("/storage/emulated/0".equals(path))
             return resources.getString(R.string.storage);
-        else if(openmode==2)
+        else if (openmode == 2)
             return new MainActivityHelper(mainActivity).getIntegralNames(path);
         else
             return new File(path).getName();
@@ -215,10 +231,10 @@ public class TabFragment extends android.support.v4.app.Fragment
         super.onSaveInstanceState(outState);
         try {
             int i = 0;
-            if(Sp!=null)
-            Sp.edit().putInt("currenttab",currenttab).commit();
-            if (fragments != null && fragments.size() !=0) {
-                if(fragmentManager==null)return;
+            if (Sp != null)
+                Sp.edit().putInt("currenttab", currenttab).commit();
+            if (fragments != null && fragments.size() != 0) {
+                if (fragmentManager == null) return;
                 for (Fragment fragment : fragments) {
                     fragmentManager.putFragment(outState, "tab" + i, fragment);
                     i++;
@@ -226,7 +242,7 @@ public class TabFragment extends android.support.v4.app.Fragment
                 outState.putInt("pos", mViewPager.getCurrentItem());
             }
         } catch (Exception e) {
-            Logger.log(e,"puttingtosavedinstance",getActivity());
+            Logger.log(e, "puttingtosavedinstance", getActivity());
             e.printStackTrace();
         }
     }
@@ -240,26 +256,64 @@ public class TabFragment extends android.support.v4.app.Fragment
     public void onPageSelected(int p1) {
 
         mToolBarContainer.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-        currenttab=p1;
-        Fragment fragment=fragments.get(p1);
-        if(fragment!=null) {
+        currenttab = p1;
+        Fragment fragment = fragments.get(p1);
+        if (fragment != null) {
             String name = fragments.get(p1).getClass().getName();
-            if (name!=null && name.contains("Main")) {
+            if (name != null && name.contains("Main")) {
                 Main ma = ((Main) fragments.get(p1));
                 if (ma.CURRENT_PATH != null) {
                     try {
                         mainActivity.updateDrawer(ma.CURRENT_PATH);
-                        mainActivity.updatePath(ma.CURRENT_PATH,  ma.results,ma.openMode,
+                        mainActivity.updatePath(ma.CURRENT_PATH, ma.results, ma.openMode,
                                 ma.folder_count, ma.file_count);
                         if (buttons.getVisibility() == View.VISIBLE) {
                             mainActivity.bbar(ma);
+                        }
+                        TextView pathname = (TextView) mainActivity.pathbar.findViewById(R.id.pathname);
+                        if (pathname.getVisibility() == View.GONE) {
+                            pathname.setVisibility(View.VISIBLE);
                         }
                     } catch (Exception e) {
                         //       e.printStackTrace();5
                     }
                 }
             }
+            if (name != null && name.contains("History")) {  //传输页面
+                try {
+                    final TextView bapath = (TextView) mainActivity.pathbar.findViewById(R.id.fullpath);
+                    final TextView pathname = (TextView) mainActivity.pathbar.findViewById(R.id.pathname);
+                    final Animation slideIn = AnimationUtils.loadAnimation(mainActivity, R.anim.slide_in);
+                    bapath.setAnimation(slideIn);
+                    bapath.animate().setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pathname.setVisibility(View.GONE);
+                                    bapath.setText("文件传送");
+                                }
+                            }, 0);
+                        }
+
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+//                            animPath.setText(newPathBuilder.toString());
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            super.onAnimationCancel(animation);
+                        }
+                    }).setStartDelay(0).start();
+                } catch (Exception e) {
+                }
+            }
         }
+
     }
 
     @Override
@@ -270,8 +324,8 @@ public class TabFragment extends android.support.v4.app.Fragment
     public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
         @Override
-        public int getItemPosition (Object object)
-        {int index = fragments.indexOf ((Fragment)object);
+        public int getItemPosition(Object object) {
+            int index = fragments.indexOf((Fragment) object);
             if (index == -1)
                 return POSITION_NONE;
             else
@@ -295,14 +349,14 @@ public class TabFragment extends android.support.v4.app.Fragment
         }
     }
 
-    public void addTab(Tab text,int pos,String path) {
-        if(text==null)return;
+    public void addTab(Tab text, int pos, String path) {
+        if (text == null) return;
         android.support.v4.app.Fragment main = new Main();
         Bundle b = new Bundle();
-        if(path!=null && path.length()!=0)
-            b.putString("lastpath",path);
+        if (path != null && path.length() != 0)
+            b.putString("lastpath", path);
         else
-            b.putString("lastpath",text.getOriginalPath(savepaths));
+            b.putString("lastpath", text.getOriginalPath(savepaths));
         b.putString("home", text.getHome());
         b.putInt("no", pos);
         main.setArguments(b);
@@ -310,14 +364,23 @@ public class TabFragment extends android.support.v4.app.Fragment
         mSectionsPagerAdapter.notifyDataSetChanged();
         mViewPager.setOffscreenPageLimit(4);
     }
+
+    //添加文件传送模块Fragment
+    public void addTabWifi() {
+        HistoryFragment mHistoryFragment = new HistoryFragment();
+        fragments.add(mHistoryFragment);
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        mViewPager.setOffscreenPageLimit(4);
+    }
+
     public Fragment getTab() {
-        if(fragments.size()==2)
-        return fragments.get(mViewPager.getCurrentItem());
-        else return null;
+//        if (fragments.size() != 0)
+        return fragments.get(0);
+//        else return null;
     }
 
     public Fragment getTab(int pos) {
-        if(fragments.size()==2 && pos<2)
+        if (fragments.size() == 2 && pos < 2)
             return fragments.get(pos);
         else return null;
     }

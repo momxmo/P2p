@@ -1999,11 +1999,11 @@ public class MainActivity extends BaseActivity implements
         floatingActionButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                mainActivityHelper.add(2);
-//                revealShow(findViewById(R.id.fab_bg), false);
-//                floatingActionButton.close(true);
+                mainActivityHelper.add(2);
+                revealShow(findViewById(R.id.fab_bg), false);
+                floatingActionButton.close(true);
                 //连接wifi设备
-                getDeviceConnectDialog().show();
+//                getDeviceConnectDialog().show();
             }
         });
         //登入
@@ -2303,7 +2303,7 @@ public class MainActivity extends BaseActivity implements
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main m = ((Main) getFragment().getTab());
+                Main m = ((Main) getFragment().getTab(0));
                 if (m.openMode == 0) {
                     bbar(m);
                     crossfade();

@@ -301,5 +301,8 @@
     <string name="database">数据库</string>
     <string name="colourednavigation">导航栏变色</string>
     <string name="colourednavigationsum">设置导航栏是否跟随皮肤颜色变色</string>
+    <string name="app_login_show">用户名</string>
+    <string name="app_login_password">密码</string>
+    <string name="app_fogot_password">忘记密码？</string>
 </resources>
 

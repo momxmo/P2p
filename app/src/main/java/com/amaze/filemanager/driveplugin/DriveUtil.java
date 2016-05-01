@@ -239,7 +239,8 @@ public class DriveUtil {
             @Override
             protected Void doInBackground(Void... voids) {
                 if (mService == null || id == null) {
-                    publishProgress(null);
+                    String temp=null;
+                    publishProgress(temp);
                     return null;
                 }
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(id).matches())
@@ -251,7 +252,8 @@ public class DriveUtil {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    publishProgress(null);
+                    String temp=null;
+                    publishProgress(temp);
                 }
                 return null;
             }
