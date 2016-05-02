@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:easemob="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_bg"
@@ -15,7 +16,18 @@
     <include
         android:id="@+id/search_bar_view"
         layout="@layout/ease_search_bar_with_padding" />
-
+    <com.easemob.easeui.widget.ContactItemView
+        android:id="@+id/application_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contactItemImage="@drawable/em_new_friends_icon"
+        app:contactItemName="@string/Application_and_notify" />
+    <com.easemob.easeui.widget.ContactItemView
+        android:id="@+id/group_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contactItemImage="@drawable/em_groups_icon"
+        app:contactItemName="@string/group_chat" />
     <FrameLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
@@ -28,5 +40,6 @@
             <!-- easemob:ctsListInitialLetterBg="#abc" -->
 
     </FrameLayout>
+
 
 </LinearLayout>

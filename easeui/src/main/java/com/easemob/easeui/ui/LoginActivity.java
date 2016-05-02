@@ -22,7 +22,7 @@ public class LoginActivity extends EaseBaseActivity{
         super.onCreate(arg0);
         if(EMChat.getInstance().isLoggedIn()){
             //登录过直接进入主页面
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, EaseUIActivity.class));
             finish();
         }
         
@@ -40,7 +40,7 @@ public class LoginActivity extends EaseBaseActivity{
                     
                     @Override
                     public void onSuccess() {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, EaseUIActivity.class));
                         finish();
                     }
                     
@@ -53,7 +53,7 @@ public class LoginActivity extends EaseBaseActivity{
                     public void onError(int code, String error) {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "登录失败", 0).show();
+                                Toast.makeText(getApplicationContext(), "登录失败", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

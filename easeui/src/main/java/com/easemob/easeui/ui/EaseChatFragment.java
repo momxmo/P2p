@@ -105,13 +105,12 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
     static final int ITEM_PICTURE = 2;
     static final int ITEM_LOCATION = 3;
     
-    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
-    protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
-            R.drawable.ease_chat_location_selector };
-    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
+//    protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location };
+//    protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
+//            R.drawable.ease_chat_location_selector };
+//    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION };
     private EMChatRoomChangeListener chatRoomChangeListener;
     private boolean isMessageListInited;
-    protected MyItemClickListener extendMenuItemClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,9 +142,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
             messageList.setShowUserNick(true);
         listView = messageList.getListView();
 
-        extendMenuItemClickListener = new MyItemClickListener();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
-        registerExtendMenuItem();
         // init input menu
         inputMenu.init(null);
         inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
@@ -244,16 +241,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
             forwardMessage(forward_msg_id);
         }
     }
-    
-    /**
-     * 注册底部菜单扩展栏item; 覆盖此方法时如果不覆盖已有item，item的id需大于3
-     */
-    protected void registerExtendMenuItem(){
-        for(int i = 0; i < itemStrings.length; i++){
-            inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], extendMenuItemClickListener);
-        }
-    }
-    
+
     
     protected void onConversationInit(){
         // 获取当前conversation对象
@@ -383,33 +371,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) { 
-            if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
-                if (cameraFile != null && cameraFile.exists())
-                    sendImageMessage(cameraFile.getAbsolutePath());
-            } else if (requestCode == REQUEST_CODE_LOCAL) { // 发送本地图片
-                if (data != null) {
-                    Uri selectedImage = data.getData();
-                    if (selectedImage != null) {
-                        sendPicByUri(selectedImage);
-                    }
-                }
-            } else if (requestCode == REQUEST_CODE_MAP) { // 地图
-                double latitude = data.getDoubleExtra("latitude", 0);
-                double longitude = data.getDoubleExtra("longitude", 0);
-                String locationAddress = data.getStringExtra("address");
-                if (locationAddress != null && !locationAddress.equals("")) {
-                    sendLocationMessage(latitude, longitude, locationAddress);
-                } else {
-                    Toast.makeText(getActivity(), R.string.unable_to_get_loaction, 0).show();
-                }
-                
-            }
-        }
-    }
+
 
     @Override
     public void onResume() {
@@ -598,37 +560,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
         });
     }
 
-    /**
-     * 扩展菜单栏item点击事件
-     *
-     */
-    class MyItemClickListener implements EaseChatExtendMenu.EaseChatExtendMenuItemClickListener{
 
-        @Override
-        public void onClick(int itemId, View view) {
-            if(chatFragmentListener != null){
-                if(chatFragmentListener.onExtendMenuItemClick(itemId, view)){
-                    return;
-                }
-            }
-            switch (itemId) {
-            case ITEM_TAKE_PICTURE: // 拍照
-                selectPicFromCamera();
-                break;
-            case ITEM_PICTURE:
-                selectPicFromLocal(); // 图库选择图片
-                break;
-            case ITEM_LOCATION: // 位置
-                startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class), REQUEST_CODE_MAP);
-                break;
-
-            default:
-                break;
-            }
-        }
-
-    }
-    
 
     //发送消息方法
     //==========================================================================
@@ -730,72 +662,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
 
     }
     
-    /**
-     * 根据uri发送文件
-     * @param uri
-     */
-    protected void sendFileByUri(Uri uri){
-        String filePath = null;
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = null;
 
-            try {
-                cursor = getActivity().getContentResolver().query(uri, filePathColumn, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    filePath = cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            filePath = uri.getPath();
-        }
-        File file = new File(filePath);
-        if (file == null || !file.exists()) {
-            Toast.makeText(getActivity(), R.string.File_does_not_exist, 0).show();
-            return;
-        }
-        //大于10M不让发送
-        if (file.length() > 10 * 1024 * 1024) {
-            Toast.makeText(getActivity(), R.string.The_file_is_not_greater_than_10_m, 0).show();
-            return;
-        }
-        sendFileMessage(filePath);
-    }
-
-    /**
-     * 照相获取图片
-     */
-    protected void selectPicFromCamera() {
-        if (!EaseCommonUtils.isExitsSdcard()) {
-            Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, 0).show();
-            return;
-        }
-
-        cameraFile = new File(PathUtil.getInstance().getImagePath(), EMChatManager.getInstance().getCurrentUser()
-                + System.currentTimeMillis() + ".jpg");
-        cameraFile.getParentFile().mkdirs();
-        startActivityForResult(
-                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
-                REQUEST_CODE_CAMERA);
-    }
-
-    /**
-     * 从图库获取图片
-     */
-    protected void selectPicFromLocal() {
-        Intent intent;
-        if (Build.VERSION.SDK_INT < 19) {
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        startActivityForResult(intent, REQUEST_CODE_LOCAL);
-    }
 
 
 
@@ -915,7 +782,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
                     if (toChatUsername.equals(groupId)) {
-                        Toast.makeText(getActivity(), R.string.the_current_group, 1).show();
+                        Toast.makeText(getActivity(), R.string.the_current_group, Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }
                 }
@@ -926,9 +793,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
     
    
     protected EaseChatFragmentListener chatFragmentListener;
-    public void setChatFragmentListener(EaseChatFragmentListener chatFragmentListener){
-        this.chatFragmentListener = chatFragmentListener;
-    }
+
     
     public interface EaseChatFragmentListener{
         /**
