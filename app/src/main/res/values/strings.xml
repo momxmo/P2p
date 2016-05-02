@@ -343,7 +343,7 @@
     <string name="needsaccess">Write Access Required</string>
     <string name="needsaccesssummary">Please choose the root directory of \t</string>
     <string name="needsaccesssummary1">\tto grant write access to operate </string>
-    <string name="smb_con">SMB Connection</string>
+    <string name="smb_con">W-scan</string>
     <string name="smb_server">Server IP Address</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -426,5 +426,11 @@
     <string name="app_fogot_password">忘记密码？</string>
     <string name="app_sign_up">注册</string>
     <string name="app_sign_in">登入</string>
+    <string name="register_input_username">输入用户名</string>
+    <string name="register_input_password">输入密码</string>
+    <string name="register_input_nickname">输入确认密码</string>
+    <string name="register_agree">注册</string>
+    <string name="register_user_agreement">阅读用户协议</string>
+    <string name="register_declaration">Wifi-T 注册</string>
 </resources>
 

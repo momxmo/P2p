@@ -57,6 +57,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
@@ -139,6 +140,10 @@ import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.PreferenceUtils;
 import com.amaze.filemanager.utils.SdcardUtils;
 import com.amaze.filemanager.utils.ToastUtils;
+import com.easemob.EMConnectionListener;
+import com.easemob.EMError;
+import com.easemob.chat.EMChatManager;
+import com.easemob.util.NetUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -172,6 +177,10 @@ public class MainActivity extends BaseActivity implements
 
     private ArrayList<String> selectFiles;
     FloatingActionButton floatingActionButton3;
+    FloatingActionButton floatingActionButton5;
+    RoundedImageView mHeadPic;
+    TextView mTV_email;
+    TextView mTV_username;
 
     private static final String TAG = "MainActivity";
     final Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -263,8 +272,9 @@ public class MainActivity extends BaseActivity implements
         initialisePreferences();
         setTheme();
         setContentView(R.layout.main_toolbar);
-        initP2p();
         initialiseViews();
+        initP2p();
+        initIMState();
         DataUtils.clear();
         DataUtils.registerOnDataChangedListener(this);
         tabHandler = new TabHandler(this, null, null, 1);
@@ -442,11 +452,18 @@ public class MainActivity extends BaseActivity implements
             ((Activity) this).setTaskDescription(taskDescription);
         }
     }
+
+    private void initIMState() {
+        //注册一个监听连接状态的listener
+        EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+    }
+
     private WifiP2pHelper wifiP2pHelper;
     private DeviceConnectDialog deviceConnectDialog;
     private final IntentFilter intentFilter = new IntentFilter();
     private OnSendFileListChangeListener onSendFileListChangeListener;
     private File received_file_path; //收到的文件的保存路径
+
     /**
      * 初始化P2p连接
      */
@@ -473,7 +490,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     public File getReceivedFileDirPath() {
-        if(received_file_path == null) {
+        if (received_file_path == null) {
             received_file_path = new File(SdcardUtils.getUseableSdcardFile(getApplicationContext(), false), "收到文件");
         }
         return received_file_path;
@@ -481,43 +498,45 @@ public class MainActivity extends BaseActivity implements
 
 
     public boolean addFileToSendFileList(String path, String name) {
-        if(path==null || "".equals(path)) {
+        if (path == null || "".equals(path)) {
             return false;
         }
         boolean isExist = false;
-        for(int i=0; i<selectFiles.size(); i++) {
+        for (int i = 0; i < selectFiles.size(); i++) {
             String temp = selectFiles.get(i);
-            if(path.equals(temp)) {
+            if (path.equals(temp)) {
                 isExist = true;
                 break;
             }
         }
-        if(!isExist) {
+        if (!isExist) {
             selectFiles.add(path);
-            if(this.onSendFileListChangeListener!=null) {
+            if (this.onSendFileListChangeListener != null) {
                 this.onSendFileListChangeListener.onSendFileListChange(this.selectFiles, selectFiles.size());
             }
         }
         return !isExist;
     }
+
     public void removeFileFromSendFileList(ArrayList<String> list) {
-        if(list == null) return;
-        for(int i=0; i<list.size(); i++) {
+        if (list == null) return;
+        for (int i = 0; i < list.size(); i++) {
             removeFileFromSendFileList(list.get(i));
         }
     }
+
     //remove a file in the sendFile-list
     public boolean removeFileFromSendFileList(String path) {
-        if(path==null || "".equals(path)) {
+        if (path == null || "".equals(path)) {
             return false;
         }
         boolean isExist = false;
-        for(int i=0; i<selectFiles.size(); i++) {
+        for (int i = 0; i < selectFiles.size(); i++) {
             String temp = selectFiles.get(i);
-            if(path.equals(temp)) {
+            if (path.equals(temp)) {
                 selectFiles.remove(i);
                 isExist = true;
-                if(this.onSendFileListChangeListener!=null) {
+                if (this.onSendFileListChangeListener != null) {
                     this.onSendFileListChangeListener.onSendFileListChange(this.selectFiles, selectFiles.size());
                 }
                 break;
@@ -530,7 +549,7 @@ public class MainActivity extends BaseActivity implements
     //clear the sendFile-list
     public void clearSendFileList() {
         selectFiles.clear();
-        if(this.onSendFileListChangeListener!=null) {
+        if (this.onSendFileListChangeListener != null) {
             this.onSendFileListChangeListener.onSendFileListChange(this.selectFiles, selectFiles.size());
         }
     }
@@ -538,6 +557,7 @@ public class MainActivity extends BaseActivity implements
     public ArrayList<String> getSendFiles() {
         return this.selectFiles;
     }
+
     public WifiP2pHelper getWifiP2pHelper() {
         return wifiP2pHelper;
     }
@@ -1625,6 +1645,8 @@ public class MainActivity extends BaseActivity implements
         } else if (requestCode == 4) {  //登入返回结果
             if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
                 Log.d(TAG, "登入成功");
+                loaginSuccess();
+
             }
         }
     }
@@ -1818,6 +1840,9 @@ public class MainActivity extends BaseActivity implements
         buttonBarFrame = (FrameLayout) findViewById(R.id.buttonbarframe);
         buttonBarFrame.setBackgroundColor(Color.parseColor(skin));
         drawerHeaderLayout = getLayoutInflater().inflate(R.layout.drawerheader, null);
+        mHeadPic = (RoundedImageView) drawerHeaderLayout.findViewById(R.id.profile_pic);
+        mTV_username = (TextView) drawerHeaderLayout.findViewById(R.id.account_header_drawer_name);
+        mTV_email = (TextView) drawerHeaderLayout.findViewById(R.id.account_header_drawer_email);
         drawerHeaderParent = (RelativeLayout) drawerHeaderLayout.findViewById(R.id.drawer_header_parent);
         drawerHeaderView = (View) drawerHeaderLayout.findViewById(R.id.drawer_header);
         drawerHeaderView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1999,15 +2024,15 @@ public class MainActivity extends BaseActivity implements
         floatingActionButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainActivityHelper.add(2);
-                revealShow(findViewById(R.id.fab_bg), false);
-                floatingActionButton.close(true);
+//                mainActivityHelper.add(2);
+//                revealShow(findViewById(R.id.fab_bg), false);
+//                floatingActionButton.close(true);
                 //连接wifi设备
-//                getDeviceConnectDialog().show();
+                getDeviceConnectDialog().show();
             }
         });
         //登入
-        FloatingActionButton floatingActionButton5 = (FloatingActionButton) findViewById(R.id.menu_item5);
+        floatingActionButton5 = (FloatingActionButton) findViewById(R.id.menu_item5);
         floatingActionButton5.setColorNormal(folderskin);
         floatingActionButton5.setColorPressed(fabskinpressed);
         floatingActionButton5.setOnClickListener(new View.OnClickListener() {
@@ -2999,13 +3024,13 @@ public class MainActivity extends BaseActivity implements
                 case WifiP2pHelper.WIFIP2P_DEVICE_CONNECTED_SUCCESS://设备连接成功
                     deviceConnectDialog.updateConnectedInfo(wifiP2pHelper.isServer());
                     //连接成功后关联 dialog
-                    if(deviceConnectDialog.isShowing()) {
+                    if (deviceConnectDialog.isShowing()) {
                         deviceConnectDialog.dismiss();
                     }
                     //隐藏 "传" 按钮
 //                    contentfragment.toggleConnectImgBut(false);
                     if (floatingActionButton3 != null) {
-                        floatingActionButton3.setVisibility(View.GONE);
+                        floatingActionButton3.setVisibility(View.INVISIBLE);
                     }
                     ToastUtils.toast(MainActivity.this, R.string.connect_successed);
                     break;
@@ -3027,7 +3052,7 @@ public class MainActivity extends BaseActivity implements
                     LogUtils.i(WifiP2pHelper.TAG, "handle--->WIFIP2P_BEGIN_SEND_FILE");
                     f = (File) msg.obj;
                     record = recordManager.findRecord(f.getPath(), Record.STATE_WAIT_FOR_TRANSPORT, true);
-                    if(record == null) break;
+                    if (record == null) break;
                     record.setState(Record.STATE_TRANSPORTING);
                     //开始更新传输速度和传输进度
                     handler.obtainMessage(WifiP2pHelper.WIFIP2P_UPDATE_SPEED, f).sendToTarget();
@@ -3038,10 +3063,10 @@ public class MainActivity extends BaseActivity implements
                 case WifiP2pHelper.WIFIP2P_SEND_ONE_FILE_FAILURE:    // 发送完一个文件----失败
                     f = (File) msg.obj;
                     record = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, true);
-                    if(record == null) break;
-                    if(msg.what == WifiP2pHelper.WIFIP2P_SEND_ONE_FILE_SUCCESSFULLY) {//发送成功
+                    if (record == null) break;
+                    if (msg.what == WifiP2pHelper.WIFIP2P_SEND_ONE_FILE_SUCCESSFULLY) {//发送成功
                         record.setState(Record.STATE_FINISHED);
-                    }else { //发送失败
+                    } else { //发送失败
                         record.setState(Record.STATE_FAILED);
                     }
                     break;
@@ -3060,15 +3085,15 @@ public class MainActivity extends BaseActivity implements
                 case WifiP2pHelper.WIFIP2P_RECEIVE_ONE_FILE_SUCCESSFULLY: //接收完一个文件----成功
                 case WifiP2pHelper.WIFIP2P_RECEIVE_ONE_FILE_FAILURE:  //接收完一个文件---失败
                     f = (File) msg.obj;
-                    if(f == null) break;
+                    if (f == null) break;
                     record = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, false);
-                    if(record == null) {
+                    if (record == null) {
                         LogUtils.i(WifiP2pHelper.TAG, "WIFIP2P_RECEIVE_ONE_FILE---->record == null 更新记录状态失败");
                         break;
                     }
-                    if(msg.what == WifiP2pHelper.WIFIP2P_RECEIVE_ONE_FILE_SUCCESSFULLY) {//接收成功
+                    if (msg.what == WifiP2pHelper.WIFIP2P_RECEIVE_ONE_FILE_SUCCESSFULLY) {//接收成功
                         record.setState(Record.STATE_FINISHED);
-                    }else { //接受失败
+                    } else { //接受失败
                         record.setState(Record.STATE_FAILED);
                     }
                     break;
@@ -3079,25 +3104,25 @@ public class MainActivity extends BaseActivity implements
                     Record tempRecord;
                     //计算发送速度
                     tempRecord = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, true);//查找正在发送的记录
-                    if(tempRecord != null) {
+                    if (tempRecord != null) {
                         tempRecord.setSpeedAndTranportLen(wifiP2pHelper.getSendSpeed(UPDATE_TRANSPORT_SPEED_INTERVAL), wifiP2pHelper.getSendCount());
                         sendSpeed = tempRecord.getSpeed();
-                    }else {
+                    } else {
                         LogUtils.i(WifiP2pHelper.TAG, "handler update speed ---> do not find the sending record");
                     }
                     //计算接收速度
                     tempRecord = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, false);//查找正在接收的记录
-                    if(tempRecord != null) {
+                    if (tempRecord != null) {
                         tempRecord.setSpeedAndTranportLen(wifiP2pHelper.getReceiveSpeed(UPDATE_TRANSPORT_SPEED_INTERVAL), wifiP2pHelper.getReceviedCount());
                         receiveSpeed = tempRecord.getSpeed();
-                    }else {
+                    } else {
                         LogUtils.i(WifiP2pHelper.TAG, "handler update speed ---> do not find the receving record");
                     }
                     //更新悬浮窗显示的速度
 //                    SpeedFloatWin.updateSpeed(sendSpeed+"M/S",
 //                            receiveSpeed+"M/S");
                     handler.removeMessages(WifiP2pHelper.WIFIP2P_UPDATE_SPEED);
-                    if(wifiP2pHelper.isTranfering()) {
+                    if (wifiP2pHelper.isTranfering()) {
                         Message msg2 = new Message();
                         msg2.what = WifiP2pHelper.WIFIP2P_UPDATE_SPEED;
                         msg2.obj = f;
@@ -3108,16 +3133,16 @@ public class MainActivity extends BaseActivity implements
                     f = (File) msg.obj;
                     //更新已接受的长度
                     record = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, true);//查找正在发送的记录
-                    if(record != null) {
+                    if (record != null) {
                         record.setTransported_len(wifiP2pHelper.getSendCount());
                     }
                     //更新已发送的长度
                     record = recordManager.findRecord(f.getPath(), Record.STATE_TRANSPORTING, false);//查找正在接收的记录
-                    if(record != null) {
+                    if (record != null) {
                         record.setTransported_len(wifiP2pHelper.getReceviedCount());
                     }
                     handler.removeMessages(WifiP2pHelper.WIFIP2P_UPDATE_PROGRESS);
-                    if(wifiP2pHelper.isTranfering()) {
+                    if (wifiP2pHelper.isTranfering()) {
                         Message msg2 = new Message();
                         msg2.what = WifiP2pHelper.WIFIP2P_UPDATE_PROGRESS;
                         msg2.obj = f;
@@ -3126,5 +3151,64 @@ public class MainActivity extends BaseActivity implements
                     break;
             }
         }
+
     };
+
+    private void loaginSuccess() {
+        String currentUser = EMChatManager.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            floatingActionButton5.setVisibility(View.VISIBLE);
+            return;
+        }
+        mHeadPic.setVisibility(View.VISIBLE);
+        floatingActionButton5.setVisibility(View.INVISIBLE);
+        floatingActionButton5.setVisibility(View.GONE);
+        if ("1".equals(currentUser)) {
+            mHeadPic.setImageResource(R.drawable.head_pic1);
+            mTV_email.setText("876164651@qq.com");
+        } else if ("2".equals(currentUser)) {
+            mHeadPic.setImageResource(R.drawable.head_pic2);
+            mTV_email.setText("momxmo@qq.com");
+        } else {
+            mHeadPic.setImageResource(R.drawable.head_pic3);
+            mTV_email.setText("momxmo@qq.com");
+        }
+        mTV_username.setText(currentUser);
+    }
+
+    //实现ConnectionListener接口
+    private class MyConnectionListener implements EMConnectionListener {
+        @Override
+        public void onConnected() {
+            loaginSuccess();
+        }
+
+
+        @Override
+        public void onDisconnected(final int error) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (error == EMError.USER_REMOVED) {
+                        // 显示帐号已经被移除
+
+                        mHeadPic.setVisibility(View.GONE);
+                    } else if (error == EMError.CONNECTION_CONFLICT) {
+                        // 显示帐号在其他设备登陆
+                        mHeadPic.setVisibility(View.GONE);
+                        Snackbar.make(mHeadPic, "您的帐号在其他设备登入", Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        if (NetUtils.hasNetwork(MainActivity.this))
+                        //连接不到聊天服务器
+                        {
+                            mHeadPic.setVisibility(View.GONE);
+                        } else
+                            //当前网络不可用，请检查网络设置
+                            mHeadPic.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+    }
 }

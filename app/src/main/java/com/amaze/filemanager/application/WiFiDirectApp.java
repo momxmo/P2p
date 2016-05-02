@@ -14,7 +14,6 @@ public class WiFiDirectApp extends Application {
         super.onCreate();
         initIM();
     }
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -29,4 +28,6 @@ public class WiFiDirectApp extends Application {
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(true);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
     }
+
+
 }

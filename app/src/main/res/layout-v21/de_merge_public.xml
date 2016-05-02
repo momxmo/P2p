@@ -32,7 +32,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:text="娉ㄥ唽" />
+            android:text="忘记密码" />
     </RelativeLayout>
 
 </merge>

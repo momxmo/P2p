@@ -64,10 +64,12 @@
                     android:layout_height="wrap_content"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:background="@drawable/rc_ed_public_service_search_selector"
                     android:hint="@string/app_login_show"
                     android:singleLine="true"
+                    android:textCursorDrawable="@drawable/color_cursor"
                     android:textColor="@color/main_regist"
-                    android:textColorHint="@color/main_regist" />
+                    android:textColorHint="@color/group_list_gray" />
 
                 <FrameLayout
                     android:id="@+id/fr_username_delete"
@@ -104,9 +106,11 @@
                     android:focusableInTouchMode="true"
                     android:hint="@string/app_login_password"
                     android:inputType="textPassword"
+                    android:background="@drawable/rc_ed_public_service_search_selector"
                     android:singleLine="true"
                     android:textColor="@color/main_regist"
-                    android:textColorHint="@color/main_regist" />
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textColorHint="@color/group_list_gray" />
 
                 <FrameLayout
                     android:id="@+id/fr_pass_delete"
