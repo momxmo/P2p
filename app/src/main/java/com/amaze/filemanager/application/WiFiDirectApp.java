@@ -1,7 +1,6 @@
 package com.amaze.filemanager.application;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.easemob.chat.EMChat;
 
@@ -14,12 +13,6 @@ public class WiFiDirectApp extends Application {
         super.onCreate();
         initIM();
     }
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-//        MultiDex.install(this);
-    }
-
     /**
      * 初始化环信
      */

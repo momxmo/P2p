@@ -148,6 +148,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
     class ChildViewHolder {
         View view_send_recevice_flag;
         ImageView img_icon;
+        ImageView iv_delete;
         TextView txt_name;
         NumberProgressBar progressBar;
 //        ProgressBar progressBar;
@@ -163,6 +164,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
             ChildViewHolder childViewHolder = new ChildViewHolder();
             childViewHolder.view_send_recevice_flag = convertView.findViewById(R.id.view_send_recevice_flag);
             childViewHolder.img_icon = (ImageView) convertView.findViewById(R.id.img_icon);
+            childViewHolder.iv_delete = (ImageView) convertView.findViewById(R.id.iv_delete);
             childViewHolder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
             childViewHolder.progressBar = (NumberProgressBar) convertView.findViewById(R.id.progressbar);
             childViewHolder.txt_send_speed = (TextView) convertView.findViewById(R.id.txt_send_speed);
@@ -209,6 +211,13 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
         }else { //set default icon
             holder.img_icon.setImageResource(FileTypeUtils.getDefaultFileIcon(record.getPath()));
         }
+
+        holder.iv_delete.setOnClickListener(new View.OnClickListener() {  //点击删除当前item任务
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         //set name:
         if(record.getName() == null) {
             File f = new File(record.getPath());

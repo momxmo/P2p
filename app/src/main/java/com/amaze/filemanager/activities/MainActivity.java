@@ -37,6 +37,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -161,6 +162,8 @@ import com.stericson.RootTools.RootTools;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -175,6 +178,8 @@ public class MainActivity extends BaseActivity implements
         AsyncHelper.HelperCallbacks {
 
 
+    private static final int IM_CONN_SUCC = 151;
+    private static final int IM_CONN_ERROR = 152;
     private ArrayList<String> selectFiles;
     FloatingActionButton floatingActionButton3;
     FloatingActionButton floatingActionButton5;
@@ -454,7 +459,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void initIMState() {
-        //注册一个监听连接状态的listener
         EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
     }
 
@@ -469,13 +473,11 @@ public class MainActivity extends BaseActivity implements
      */
     private void initP2p() {
         //保持屏幕常亮
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         selectFiles = new ArrayList<>();
         wifiP2pHelper = new WifiP2pHelper(this, this.handler);
-
         // 實作 drawer toggle 並放入 toolbar
         deviceConnectDialog = new DeviceConnectDialog(this, R.style.FullHeightDialog);
-
         clearSendFileList();
 
         //注册监听
@@ -488,6 +490,7 @@ public class MainActivity extends BaseActivity implements
         registerReceiver(wifiP2pHelper, intentFilter);
         RecordManager.getInstance(this).clearAllRecord();
     }
+
 
     public File getReceivedFileDirPath() {
         if (received_file_path == null) {
@@ -1247,14 +1250,13 @@ public class MainActivity extends BaseActivity implements
         registerReceiver(receiver2, new IntentFilter("general_communications"));
         if (getSupportFragmentManager().findFragmentById(R.id.content_frame)
                 .getClass().getName().contains("TabFragment")) {
-
             floatingActionButton.setVisibility(View.VISIBLE);
             floatingActionButton.showMenuButton(false);
         } else {
-
             floatingActionButton.setVisibility(View.INVISIBLE);
             floatingActionButton.hideMenuButton(false);
         }
+
     }
 
     @Override
@@ -1645,7 +1647,7 @@ public class MainActivity extends BaseActivity implements
         } else if (requestCode == 4) {  //登入返回结果
             if (responseCode == LoginActivity.LOGIN_SUCCESS) { //登入成功
                 Log.d(TAG, "登入成功");
-                loaginSuccess();
+//                loaginSuccess();
 
             }
         }
@@ -3029,18 +3031,12 @@ public class MainActivity extends BaseActivity implements
                     }
                     //隐藏 "传" 按钮
 //                    contentfragment.toggleConnectImgBut(false);
-                    if (floatingActionButton3 != null) {
-                        floatingActionButton3.setVisibility(View.INVISIBLE);
-                    }
                     ToastUtils.toast(MainActivity.this, R.string.connect_successed);
                     break;
                 case WifiP2pHelper.WIFIP2P_DEVICE_DISCONNECTED: //连接已断开
                     deviceConnectDialog.onDisconnectedInfo();
                     //显示 "传" 按钮
 //                    contentfragment.toggleConnectImgBut(true);
-                    if (floatingActionButton3 != null) {
-                        floatingActionButton3.setVisibility(View.VISIBLE);
-                    }
                     break;
 
                 /////////////////////////////////////////////////////////////////////////
@@ -3149,66 +3145,80 @@ public class MainActivity extends BaseActivity implements
                         handler.sendMessageDelayed(msg2, UPDATE_TRANSPORT_PROGRESS_INTERVAL);
                     }
                     break;
+
+                case IM_CONN_ERROR:
+                    int error = msg.arg1;
+                    if(error == EMError.USER_REMOVED) {
+                        // 显示帐号已经被移除
+                        Log.d(TAG, "1");
+                        updateUserUI(false, -1, "离线");
+                    }else if (error == EMError.CONNECTION_CONFLICT) {
+                        // 显示帐号在其他设备登陆
+                        Log.d(TAG, "2");
+                        updateUserUI(false, -1, "离线");
+                    } else {
+                        if (NetUtils.hasNetwork(getApplicationContext())) {
+                            //连接不到聊天服务器
+                            Log.d(TAG, "3");
+                            updateUserUI(false, -1, "离线");
+                        }
+                        else {
+                            Log.d(TAG, "4");
+                            updateUserUI(false, -1, "离线");
+                        }
+                        //当前网络不可用，请检查网络设置
+                    }
+                    break;
+                case IM_CONN_SUCC:
+                    updateUserUI(true, R.drawable.head_pic1, "在线");
+                    break;
             }
         }
 
     };
 
-    private void loaginSuccess() {
-        String currentUser = EMChatManager.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            floatingActionButton5.setVisibility(View.VISIBLE);
-            return;
-        }
-        mHeadPic.setVisibility(View.VISIBLE);
-        floatingActionButton5.setVisibility(View.INVISIBLE);
-        floatingActionButton5.setVisibility(View.GONE);
-        if ("1".equals(currentUser)) {
-            mHeadPic.setImageResource(R.drawable.head_pic1);
-            mTV_email.setText("876164651@qq.com");
-        } else if ("2".equals(currentUser)) {
-            mHeadPic.setImageResource(R.drawable.head_pic2);
-            mTV_email.setText("momxmo@qq.com");
+    /**
+     * 用户状态改变
+     * @param show
+     */
+    public void updateUserUI(boolean show,int resource,String state_msg) {
+        if (show) {
+            try {
+                String currentUser = EMChatManager.getInstance().getCurrentUser();
+                mTV_username.setText("称昵:"+currentUser);
+                wifiP2pHelper.setDeviceName();
+            } catch (Exception e) {
+            }
+            mTV_email.setText(state_msg);
+            floatingActionButton5.setVisibility(View.GONE);
         } else {
-            mHeadPic.setImageResource(R.drawable.head_pic3);
-            mTV_email.setText("momxmo@qq.com");
+            mHeadPic.setBackground(null);
+            mTV_email.setText(state_msg);
+            floatingActionButton5.setVisibility(View.VISIBLE);//显示登入
         }
-        mTV_username.setText(currentUser);
+        mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(), resource));
+    }
+
+    public void updateUIhintWifi_scan(boolean showHidden) {
+        if (showHidden) {
+            floatingActionButton3.setVisibility(View.GONE);
+        } else {
+            floatingActionButton3.setVisibility(View.VISIBLE);
+        }
     }
 
     //实现ConnectionListener接口
     private class MyConnectionListener implements EMConnectionListener {
         @Override
         public void onConnected() {
-            loaginSuccess();
+            handler.sendEmptyMessage(IM_CONN_SUCC);
         }
-
-
         @Override
         public void onDisconnected(final int error) {
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (error == EMError.USER_REMOVED) {
-                        // 显示帐号已经被移除
-
-                        mHeadPic.setVisibility(View.GONE);
-                    } else if (error == EMError.CONNECTION_CONFLICT) {
-                        // 显示帐号在其他设备登陆
-                        mHeadPic.setVisibility(View.GONE);
-                        Snackbar.make(mHeadPic, "您的帐号在其他设备登入", Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        if (NetUtils.hasNetwork(MainActivity.this))
-                        //连接不到聊天服务器
-                        {
-                            mHeadPic.setVisibility(View.GONE);
-                        } else
-                            //当前网络不可用，请检查网络设置
-                            mHeadPic.setVisibility(View.GONE);
-                    }
-                }
-            });
+            Message message = handler.obtainMessage();
+            message.what = IM_CONN_ERROR;
+            message.arg1 = error;
+            handler.sendMessage(message);
         }
     }
 }

@@ -16,6 +16,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ import com.amaze.filemanager.utils.DataTypeUtils;
 import com.amaze.filemanager.utils.FileTypeUtils;
 import com.amaze.filemanager.utils.LogUtils;
 import com.amaze.filemanager.utils.SdcardUtils;
+import com.easemob.chat.EMChatManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,7 +70,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
 
     public static final int WIFIP2P_UPDATE_SPEED = 135; //更新速度
     public static final int WIFIP2P_UPDATE_PROGRESS = 136; //更新进度
-    private WifiP2pManager manager;
+    public WifiP2pManager manager;
     private Channel channel;
     private ArrayList<WifiP2pDevice> deviceList;
     private WifiP2pInfo connectInfo;
@@ -96,30 +98,45 @@ public class WifiP2pHelper extends BroadcastReceiver implements
     public WifiP2pHelper(final MainActivity activity, Handler handler) {
         this.activity = activity;
         this.handler = handler;
-        setDeviceName("我的设备---");
         manager = (WifiP2pManager) activity
                 .getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(activity, activity.getMainLooper(), null);
+        setDeviceName(); //设置设备名称；
+
         deviceList = new ArrayList<WifiP2pDevice>();
         sendingFileList = new ArrayList<>();
         updateWifiMac();
 
     }
 
-    public void setDeviceName(String devName) {
+    /**
+     * 设置设备名称：当用户登入之后，设置用户的名称，如果用户没登入，设置设备的名称
+     */
+    public void setDeviceName() {
+        String devName = null;
         try {
+            String currentUser = EMChatManager.getInstance().getCurrentUser();
+            if (currentUser != null) {
+                devName = currentUser;
+            } else {
+                devName = Build.MODEL;
+            }
+        } catch (Exception e) {
+            devName = Build.MODEL;
+        }
+        try {
+
             Class[] paramTypes = new Class[3];
-            paramTypes[0] = Channel.class;
+            paramTypes[0] = WifiP2pManager.Channel.class;
             paramTypes[1] = String.class;
-            paramTypes[2] = ActionListener.class;
+            paramTypes[2] = WifiP2pManager.ActionListener.class;
             Method setDeviceName = manager.getClass().getMethod(
                     "setDeviceName", paramTypes);
             setDeviceName.setAccessible(true);
-
             Object arglist[] = new Object[3];
             arglist[0] = channel;
             arglist[1] = devName;
-            arglist[2] = new ActionListener() {
+            arglist[2] = new WifiP2pManager.ActionListener() {
 
                 @Override
                 public void onSuccess() {
@@ -741,10 +758,12 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                 isConnected = true;
                 manager.requestConnectionInfo(channel, this);
                 Log.d(TAG, "device Connected!!--->requestConnectionInfo()");
+                activity.updateUIhintWifi_scan(true);
             } else {
                 // It's a disconnect
                 isConnected = false;
                 currentConnectMAC = null;
+                activity.updateUIhintWifi_scan(false);
                 Log.d(TAG, "device disconnected!!)");
                 release();
                 handler.sendEmptyMessage(WIFIP2P_DEVICE_DISCONNECTED); //设置断开连接
@@ -754,6 +773,9 @@ public class WifiP2pHelper extends BroadcastReceiver implements
 //                    .findFragmentById(R.id.frag_list);
 //            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
 //                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+            WifiP2pDevice myDevice = (WifiP2pDevice) intent.getParcelableExtra(
+                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+            Log.d(TAG, "mydevice Name " + myDevice.deviceName + "  mac:" + myDevice.deviceAddress);
         } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
             updateWifiMac();
         }
