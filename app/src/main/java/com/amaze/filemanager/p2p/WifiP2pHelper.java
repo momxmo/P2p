@@ -33,6 +33,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -73,12 +75,11 @@ public class WifiP2pHelper extends BroadcastReceiver implements
     private boolean isConnected = false;
 
 
-
     // 作为服务socket用来接收对方发送的文件
     private ServerSocket serverSocket;
     private InetAddress clientAddress;  //客户端的地址
     private String currentMAC;
-    private String currentConnectMAC= null;
+    private String currentConnectMAC = null;
 
     private MainActivity activity;
     private Handler handler;
@@ -95,12 +96,53 @@ public class WifiP2pHelper extends BroadcastReceiver implements
     public WifiP2pHelper(final MainActivity activity, Handler handler) {
         this.activity = activity;
         this.handler = handler;
+        setDeviceName("我的设备---");
         manager = (WifiP2pManager) activity
                 .getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(activity, activity.getMainLooper(), null);
         deviceList = new ArrayList<WifiP2pDevice>();
         sendingFileList = new ArrayList<>();
         updateWifiMac();
+
+    }
+
+    public void setDeviceName(String devName) {
+        try {
+            Class[] paramTypes = new Class[3];
+            paramTypes[0] = Channel.class;
+            paramTypes[1] = String.class;
+            paramTypes[2] = ActionListener.class;
+            Method setDeviceName = manager.getClass().getMethod(
+                    "setDeviceName", paramTypes);
+            setDeviceName.setAccessible(true);
+
+            Object arglist[] = new Object[3];
+            arglist[0] = channel;
+            arglist[1] = devName;
+            arglist[2] = new ActionListener() {
+
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "setDeviceName succeeded");
+                }
+
+                @Override
+                public void onFailure(int reason) {
+                    Log.d(TAG, "setDeviceName failed");
+                }
+            };
+
+            setDeviceName.invoke(manager, arglist);
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateWifiMac() {
@@ -198,7 +240,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                     }
                     isSuccessed = false;
                 }
-                if(isSuccessed) {
+                if (isSuccessed) {
                     handler.obtainMessage(WIFIP2P_BEGIN_SEND_FILE, f).sendToTarget();
                     try {
                         inputstream = new FileInputStream(f);
@@ -237,7 +279,8 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                             if (socket != null) {
                                 socket.close();
                             }
-                        } catch (IOException e) {}
+                        } catch (IOException e) {
+                        }
                     }
                 }
                 sendingFileList.remove(0);//从要发送文件列表中移除
@@ -265,6 +308,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
     private class FileReceiveAsyncTask extends AsyncTask<Socket, Integer, Boolean> {
         private boolean isTranfering = false;
         Timer timer = new Timer();
+
         @Override
         protected Boolean doInBackground(Socket... params) {
             isTranfering = true;
@@ -323,7 +367,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                             f = new File(activity.getReceivedFileDirPath(),
                                     FileTypeUtils.getTypeString(activity, name) + File.separator + name2);
                         } else {
-                            String name2 = name+"_"+i;
+                            String name2 = name + "_" + i;
                             f = new File(activity.getReceivedFileDirPath(),
                                     FileTypeUtils.getTypeString(activity, name) + File.separator + name2);
                         }
@@ -391,9 +435,9 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                 }
                 mReceviceCount = 0;
                 LogUtils.i(WifiP2pHelper.TAG, "接收完一个文件----->isSuccessed=" + isSuccessed);
-                if(isSuccessed) {
+                if (isSuccessed) {
                     handler.obtainMessage(WIFIP2P_RECEIVE_ONE_FILE_SUCCESSFULLY, f).sendToTarget();
-                }else {
+                } else {
                     handler.obtainMessage(WIFIP2P_RECEIVE_ONE_FILE_FAILURE, f).sendToTarget();
                 }
             }
@@ -414,8 +458,8 @@ public class WifiP2pHelper extends BroadcastReceiver implements
 
     public double getSendSpeed(int ms) {
         double ret = 0;
-        if(mSendCount>=mLastSendCount) {
-            ret = (mSendCount-mLastSendCount)/(ms/1000.0f);
+        if (mSendCount >= mLastSendCount) {
+            ret = (mSendCount - mLastSendCount) / (ms / 1000.0f);
             LogUtils.i(TAG, "send speed = " + ret);
             ret = ret / 1024 / 1024.0f;
             ret = Double.valueOf(DataTypeUtils.format(ret));
@@ -426,8 +470,8 @@ public class WifiP2pHelper extends BroadcastReceiver implements
 
     public double getReceiveSpeed(int ms) {
         double ret = 0;
-        if(mReceviceCount>=mLastRceviceCount) {
-            ret = (mReceviceCount-mLastRceviceCount)/(ms/1000.0f);
+        if (mReceviceCount >= mLastRceviceCount) {
+            ret = (mReceviceCount - mLastRceviceCount) / (ms / 1000.0f);
             LogUtils.i(TAG, "recevied speed = " + ret);
             ret = ret / 1024 / 1024.0f;
             ret = Double.valueOf(DataTypeUtils.format(ret));
@@ -459,7 +503,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
         WifiP2pDevice device;
         deviceList.clear();
         deviceList.addAll(peerList.getDeviceList());
-        for(int i=0; i<deviceList.size(); i++) {
+        for (int i = 0; i < deviceList.size(); i++) {
             WifiP2pDevice dd = deviceList.get(i);
 //            LogUtils.i(WifiP2pHelper.TAG, dd + "---->addr="+dd.deviceAddress);
         }
@@ -479,7 +523,7 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                 // TODO Auto-generated method stub
                 try {
                     serverSocket = new ServerSocket(SOCKET_PORT);
-                    if(currentConnectMAC == null) {
+                    if (currentConnectMAC == null) {
                         if (isServer()) {//recevive the client address
                             try {
                                 Socket firstClientSocket = serverSocket.accept();
@@ -487,25 +531,25 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                                 InputStream inputStream = firstClientSocket.getInputStream();
                                 OutputStream outputStream = firstClientSocket.getOutputStream();
                                 clientAddress = firstClientSocket.getInetAddress(); //get the client addr
-                                LogUtils.i(TAG, "clientAddress="+clientAddress);
-                                LogUtils.i(TAG, "serverAddress="+connectInfo.groupOwnerAddress);
+                                LogUtils.i(TAG, "clientAddress=" + clientAddress);
+                                LogUtils.i(TAG, "serverAddress=" + connectInfo.groupOwnerAddress);
 
                                 //1.发送MAC地址给客户端
-                                if(currentMAC != null) {
+                                if (currentMAC != null) {
                                     outputStream.write(currentMAC.getBytes());
                                 }
                                 outputStream.flush();
                                 firstClientSocket.shutdownOutput();
                                 //2.读取客户端的MAC地址
                                 byte buf[] = new byte[128];
-                                StringBuffer stringBuffer =new StringBuffer();
+                                StringBuffer stringBuffer = new StringBuffer();
                                 int len = 0;
                                 while ((len = inputStream.read(buf)) != -1) {
                                     stringBuffer.append(new String(buf, 0, len));
                                 }
                                 inputStream.close();
                                 String clientMac = stringBuffer.toString();
-                                if(clientMac != null && !clientMac.equals("")) {
+                                if (clientMac != null && !clientMac.equals("")) {
                                     currentConnectMAC = clientMac;
                                 }
                                 LogUtils.d(TAG, "server has receviced clientMAC:" + currentConnectMAC);
@@ -514,23 +558,23 @@ public class WifiP2pHelper extends BroadcastReceiver implements
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        }else if(isClient()) {
+                        } else if (isClient()) {
                             Socket socket = new Socket();
                             try {
-                                LogUtils.d(TAG, "client start transfer MAC cuMAC: "+currentMAC);
+                                LogUtils.d(TAG, "client start transfer MAC cuMAC: " + currentMAC);
                                 socket.bind(null);
                                 socket.connect((new InetSocketAddress(connectInfo.groupOwnerAddress, SOCKET_PORT)), SOCKET_TIMEOUT);
                                 OutputStream outputStream = socket.getOutputStream();
                                 InputStream inputStream = socket.getInputStream();
                                 //1.读取服务端的MAC地址
                                 byte buf[] = new byte[128];
-                                StringBuffer stringBuffer =new StringBuffer();
+                                StringBuffer stringBuffer = new StringBuffer();
                                 int len = 0;
                                 while ((len = inputStream.read(buf)) != -1) {
                                     stringBuffer.append(new String(buf, 0, len));
                                 }
                                 String serverMac = stringBuffer.toString();
-                                if(serverMac != null && !serverMac.equals("")) {
+                                if (serverMac != null && !serverMac.equals("")) {
                                     currentConnectMAC = serverMac;
                                 }
                                 //2. 发送自己的MAC地址给服务端
@@ -616,10 +660,10 @@ public class WifiP2pHelper extends BroadcastReceiver implements
             this.serverSocket.close();
         } catch (Exception e) {
         }
-        if(fileReceiveAsyncTask!=null) {
+        if (fileReceiveAsyncTask != null) {
             fileReceiveAsyncTask.cancel(true);
         }
-        if(fileSendAsyncTask!=null) {
+        if (fileSendAsyncTask != null) {
             fileSendAsyncTask.cancel(true);
         }
         manager.removeGroup(channel, new ActionListener() {
