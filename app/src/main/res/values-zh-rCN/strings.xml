@@ -304,5 +304,6 @@
     <string name="app_login_show">用户名</string>
     <string name="app_login_password">密码</string>
     <string name="app_fogot_password">忘记密码？</string>
+    <string name="login">登入</string>
 </resources>
 

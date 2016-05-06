@@ -90,5 +90,6 @@
     <color name="cardView_background">#363F45</color>
 
     <color name="rippelColor">#0099CC</color>
+    <color name="blueColor">#0088ff</color>
 
 </resources>

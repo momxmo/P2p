@@ -158,7 +158,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if(convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.expandalbe_listview_childview_layout, parent, false);
             ChildViewHolder childViewHolder = new ChildViewHolder();
@@ -173,7 +173,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
             convertView.setTag(childViewHolder);
         }
         ChildViewHolder holder = (ChildViewHolder) convertView.getTag();
-        Record record = (Record) getChild(groupPosition, childPosition);
+        final Record record = (Record) getChild(groupPosition, childPosition);
 
         //set translate speed
         holder.txt_send_speed.setText(record.getSpeed()+"M/S");
@@ -212,10 +212,21 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
             holder.img_icon.setImageResource(FileTypeUtils.getDefaultFileIcon(record.getPath()));
         }
 
+        final int gp = groupPosition;
         holder.iv_delete.setOnClickListener(new View.OnClickListener() {  //点击删除当前item任务
             @Override
             public void onClick(View v) {
+                ExpandableListViewGroup group = (ExpandableListViewGroup) getGroup(gp);
+                ArrayList<Record> recordList = group.getRecordList();
+                if (recordList.contains(record)) {
+                    if (record.getState() == Record.STATE_TRANSPORTING) { //正在传输
+                        record.setState(Record.STATE_PAUSED);
+                        recordList.remove(record);
+                    } else {
+                        recordList.remove(record);
+                    }
 
+                }
             }
         });
         //set name:

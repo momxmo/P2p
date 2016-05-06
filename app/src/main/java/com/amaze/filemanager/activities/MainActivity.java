@@ -1999,7 +1999,8 @@ public class MainActivity extends BaseActivity implements
         });
 
         FloatingActionButton floatingActionButton1 = (FloatingActionButton) findViewById(R.id.menu_item);
-        floatingActionButton1.setColorNormal(folderskin);
+        floatingActionButton1.setColorNormal(getResources().getColor(R.color.primary_green));
+//        floatingActionButton1.setColorNormal(folderskin);
         floatingActionButton1.setColorPressed(fabskinpressed);
         floatingActionButton1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2010,7 +2011,8 @@ public class MainActivity extends BaseActivity implements
             }
         });
         FloatingActionButton floatingActionButton2 = (FloatingActionButton) findViewById(R.id.menu_item1);
-        floatingActionButton2.setColorNormal(folderskin);
+        floatingActionButton2.setColorNormal(getResources().getColor(R.color.primary_orange));
+//        floatingActionButton2.setColorNormal(folderskin);
         floatingActionButton2.setColorPressed(fabskinpressed);
         floatingActionButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2021,11 +2023,14 @@ public class MainActivity extends BaseActivity implements
             }
         });
         floatingActionButton3 = (FloatingActionButton) findViewById(R.id.menu_item2);
-        floatingActionButton3.setColorNormal(folderskin);
+        floatingActionButton3.setColorNormal(getResources().getColor(R.color.accent_blue));
+//        floatingActionButton3.setColorNormal(folderskin);
         floatingActionButton3.setColorPressed(fabskinpressed);
         floatingActionButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                revealShow(findViewById(R.id.fab_bg), false);
+                floatingActionButton.close(true);
 //                mainActivityHelper.add(2);
 //                revealShow(findViewById(R.id.fab_bg), false);
 //                floatingActionButton.close(true);
@@ -2035,7 +2040,8 @@ public class MainActivity extends BaseActivity implements
         });
         //登入
         floatingActionButton5 = (FloatingActionButton) findViewById(R.id.menu_item5);
-        floatingActionButton5.setColorNormal(folderskin);
+        floatingActionButton5.setColorNormal(getResources().getColor(R.color.blueColor));
+//        floatingActionButton5.setColorNormal(folderskin);
         floatingActionButton5.setColorPressed(fabskinpressed);
         floatingActionButton5.setOnClickListener(new View.OnClickListener() {
             @Override

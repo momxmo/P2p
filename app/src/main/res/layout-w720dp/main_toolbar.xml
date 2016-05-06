@@ -166,7 +166,7 @@
             android:elevation="5dp"
             android:visibility="gone"
             android:clickable="true"
-            android:background="#a6000000"/>
+            android:background="#bb000000"/>
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/menu"
