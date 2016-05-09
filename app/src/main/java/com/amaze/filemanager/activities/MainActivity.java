@@ -3196,13 +3196,25 @@ public class MainActivity extends BaseActivity implements
             } catch (Exception e) {
             }
             mTV_email.setText(state_msg);
-            floatingActionButton5.setVisibility(View.GONE);
+            mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(), resource));
+            floatingActionButton5.setLabelText("进入聊天");
+            floatingActionButton5.setOnClickListener(null);
         } else {
-            mHeadPic.setBackground(null);
+            mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.unlogin_pic));
             mTV_email.setText(state_msg);
-            floatingActionButton5.setVisibility(View.VISIBLE);//显示登入
+            floatingActionButton5.setLabelText("登入");
+            floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mainActivityHelper.add(4);
+                    revealShow(findViewById(R.id.fab_bg), false);
+                    floatingActionButton.close(true);
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 4);
+                }
+            });
         }
-        mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(), resource));
+
     }
 
     public void updateUIhintWifi_scan(boolean showHidden) {

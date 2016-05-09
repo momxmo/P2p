@@ -64,12 +64,7 @@
             android:paddingTop="10dp"
             custom:progress_current="0" />
 
-        <!--        <com.amaze.filemanager.ui.views.SnailBar
-                    android:id="@+id/progressbar"
-                    android:thumb="@anim/snailanim"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />-->
+
 
         <TextView
             android:id="@+id/txt_name"
