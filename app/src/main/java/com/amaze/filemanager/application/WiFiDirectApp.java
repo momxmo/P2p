@@ -7,6 +7,10 @@ import com.easemob.chat.EMChat;
 public class WiFiDirectApp extends Application {
 
     private static final String TAG = "PTP_APP";
+    public static boolean permission_record_audio = false; //录音权限
+    public static boolean write_external_storage = false; //写出sd卡权限
+    public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGES = 2;
 
     @Override
     public void onCreate() {

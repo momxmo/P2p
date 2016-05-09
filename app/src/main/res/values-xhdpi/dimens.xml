@@ -6,4 +6,7 @@
     <!-- +8 -->
 
     <dimen name="drawer_header_height_with_padding">179dp</dimen>
+
+    <dimen name="image_thumbnail_size">198dp</dimen>
+    <dimen name="image_thumbnail_spacing">2dp</dimen>
 </resources>

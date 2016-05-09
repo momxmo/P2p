@@ -58,7 +58,6 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
@@ -144,6 +143,7 @@ import com.amaze.filemanager.utils.ToastUtils;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
+import com.easemob.easeui.ui.EaseUIActivity;
 import com.easemob.util.NetUtils;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -162,8 +162,6 @@ import com.stericson.RootTools.RootTools;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -3198,7 +3196,16 @@ public class MainActivity extends BaseActivity implements
             mTV_email.setText(state_msg);
             mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(), resource));
             floatingActionButton5.setLabelText("进入聊天");
-            floatingActionButton5.setOnClickListener(null);
+            floatingActionButton5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mainActivityHelper.add(4);
+                    revealShow(findViewById(R.id.fab_bg), false);
+                    floatingActionButton.close(true);
+                    Intent intent = new Intent(MainActivity.this, EaseUIActivity.class);
+                    startActivity(intent);
+                }
+            });
         } else {
             mHeadPic.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.unlogin_pic));
             mTV_email.setText(state_msg);

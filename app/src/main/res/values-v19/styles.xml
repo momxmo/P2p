@@ -61,4 +61,16 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
+
+
+    <style name="Anim_style2" parent="android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/AnimFade</item>
+    </style>
+
+    <style name="horizontal_slide" parent="android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/AnimFade2</item>
+    </style>
+
+    <style name="nornal_style" parent="android:style/Theme.Holo.Light.NoActionBar"></style>
+
 </resources>
