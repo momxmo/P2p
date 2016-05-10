@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.amaze.filemanager.utils.FileResLoaderUtils;
 
@@ -18,6 +19,7 @@ import java.util.HashMap;
 public class RecordManager implements Record.OnStateChangeListener{
     public static final int ACTION_ADD = 0;
     public static final int ACTION_REMOVE = 1;
+    private static final String TAG = "RecordManager";
     public static RecordManager manager;
 
     private ArrayList<Record> recordArrayList = new ArrayList<>();
@@ -48,6 +50,8 @@ public class RecordManager implements Record.OnStateChangeListener{
         for(int i=0; i<list.size(); i++) {
             File f = list.get(i);
             String name = FileResLoaderUtils.getFileName(f.getPath());
+            Log.i(TAG, "文件的路径是：" + f.getPath());
+            Log.i(TAG, "文件的名称是：" + name);
             Record record = new Record(
                     name,
                     f.getPath(),

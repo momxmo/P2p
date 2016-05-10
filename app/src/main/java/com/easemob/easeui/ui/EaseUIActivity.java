@@ -30,7 +30,6 @@ public class EaseUIActivity extends EaseBaseActivity {
     private Button[] mTabs;
     private EaseConversationListFragment conversationListFragment;
     private EaseContactListFragment contactListFragment;
-    private SettingsFragment settingFragment;
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
@@ -41,16 +40,14 @@ public class EaseUIActivity extends EaseBaseActivity {
         setContentView(R.layout.easeui_main);
         initPermission();
         unreadLabel = (TextView) findViewById(R.id.unread_msg_number);
-        mTabs = new Button[3];
+        mTabs = new Button[2];
         mTabs[0] = (Button) findViewById(R.id.btn_conversation);
         mTabs[1] = (Button) findViewById(R.id.btn_address_list);
-        mTabs[2] = (Button) findViewById(R.id.btn_setting);
         // 把第一个tab设为选中状态
         mTabs[0].setSelected(true);
 
         conversationListFragment = new EaseConversationListFragment();
         contactListFragment = new EaseContactListFragment();
-        settingFragment = new SettingsFragment();
         contactListFragment.setContactsMap(getContacts());
         conversationListFragment.setConversationListItemClickListener(new EaseConversationListItemClickListener() {
 
@@ -66,7 +63,7 @@ public class EaseUIActivity extends EaseBaseActivity {
                 startActivity(new Intent(EaseUIActivity.this, ChatActivity.class).putExtra(EaseConstant.EXTRA_USER_ID, user.getUsername()));
             }
         });
-        fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
+        fragments = new Fragment[]{conversationListFragment, contactListFragment};
         // 添加显示第一个fragment
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
                 .add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
@@ -93,9 +90,6 @@ public class EaseUIActivity extends EaseBaseActivity {
                 break;
             case R.id.btn_address_list:
                 index = 1;
-                break;
-            case R.id.btn_setting:
-                index = 2;
                 break;
         }
         if (currentTabIndex != index) {

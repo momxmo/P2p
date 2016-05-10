@@ -45,6 +45,7 @@ import com.easemob.exceptions.EaseMobException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -223,9 +224,7 @@ public class EaseContactListFragment extends EaseBaseFragment {
 
     @Override
     public void onDestroy() {
-        
         EMChatManager.getInstance().removeConnectionListener(connectionListener);
-        
         super.onDestroy();
     }
     
@@ -277,9 +276,8 @@ public class EaseContactListFragment extends EaseBaseFragment {
         }
 
     }
-    
-    
-    
+
+
     protected EMConnectionListener connectionListener = new EMConnectionListener() {
         
         @Override
@@ -314,9 +312,20 @@ public class EaseContactListFragment extends EaseBaseFragment {
     }
     
     protected void onConnectionConnected() {
-        
+        //实时获取好友列表
+        this.contactsMap.clear();
+        try {
+            List<String> usernames = EMContactManager.getInstance().getContactUserNames();
+            for (int i = 1; i < usernames.size(); i++) {
+                EaseUser user = new EaseUser(usernames.get(i));
+                this.contactsMap.put(usernames.get(i), user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        refresh(); //刷新
     }
-    
+
     /**
      * 设置需要显示的数据map，key为环信用户id
      * @param contactsMap

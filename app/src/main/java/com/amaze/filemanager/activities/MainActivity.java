@@ -160,6 +160,8 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.stericson.RootTools.RootTools;
 
+import org.jivesoftware.smack.ConnectionListener;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -264,6 +266,7 @@ public class MainActivity extends BaseActivity implements
     public AsyncHelper mAsyncHelperFragment;
     public static final String TAG_ASYNC_HELPER = "async_helper";
     public Main mainFragment;
+    MyConnectionListener connectionListener;
 
     /**
      * Called when the activity is first created.
@@ -457,7 +460,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void initIMState() {
-        EMChatManager.getInstance().addConnectionListener(new MyConnectionListener());
+        connectionListener =  new MyConnectionListener();
+        EMChatManager.getInstance().addConnectionListener(connectionListener);
     }
 
     private WifiP2pHelper wifiP2pHelper;
@@ -1296,6 +1300,9 @@ public class MainActivity extends BaseActivity implements
             history.end();
         /*if (mainFragment!=null)
             mainFragment=null;*/
+        if (connectionListener != null) { //移除连接监听器
+            EMChatManager.getInstance().removeConnectionListener(connectionListener);
+        }
     }
 
     public void updatepaths(int pos) {
@@ -3154,20 +3161,16 @@ public class MainActivity extends BaseActivity implements
                     int error = msg.arg1;
                     if(error == EMError.USER_REMOVED) {
                         // 显示帐号已经被移除
-                        Log.d(TAG, "1");
                         updateUserUI(false, -1, "离线");
                     }else if (error == EMError.CONNECTION_CONFLICT) {
                         // 显示帐号在其他设备登陆
-                        Log.d(TAG, "2");
                         updateUserUI(false, -1, "离线");
                     } else {
                         if (NetUtils.hasNetwork(getApplicationContext())) {
                             //连接不到聊天服务器
-                            Log.d(TAG, "3");
                             updateUserUI(false, -1, "离线");
                         }
                         else {
-                            Log.d(TAG, "4");
                             updateUserUI(false, -1, "离线");
                         }
                         //当前网络不可用，请检查网络设置
