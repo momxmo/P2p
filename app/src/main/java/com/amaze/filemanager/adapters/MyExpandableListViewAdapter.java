@@ -230,7 +230,7 @@ public class MyExpandableListViewAdapter extends BaseExpandableListAdapter{
             }
         });
         //set name:
-        if(record.getName() == null) {
+        if(record.getName() == null || record.getName().equals("")) {
             File f = new File(record.getPath());
             holder.txt_name.setText(f.getName());
         }else {

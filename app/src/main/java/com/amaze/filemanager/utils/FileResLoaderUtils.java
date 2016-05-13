@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -82,6 +83,8 @@ public class FileResLoaderUtils {
                     //顺便把音乐文件的lable也一起加载了
                     fileNameMap.put(path, AudioUtils.getMusicName(path));
                 }else if(s.endsWith(".jpg") || s.endsWith(".jpeg") || s.endsWith(".bmp") || s.endsWith(".gif") || s.endsWith(".png")) {//图片文件
+                    String name = path.substring(path.lastIndexOf("/")+1, path.length());
+                    fileNameMap.put(path, name);
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inSampleSize = 10;
                     Bitmap bitmap = BitmapFactory.decodeFile(path, options);
@@ -90,8 +93,16 @@ public class FileResLoaderUtils {
                     bitmap.recycle();
                 }else if(s.endsWith(".3gp") || s.endsWith(".mp4") || s.endsWith(".rmvb")) { //视频文件
                     obj = new BitmapDrawable(GetVideoThumbnail.getVideoThumbnailTool(path));
+                    try {
+                        fileNameMap.put(path, new File(path).getName());
+                    } catch (Exception e) {
+                    }
+                }else{
+                    try {
+                        fileNameMap.put(path, new File(path).getName());
+                    } catch (Exception e) {
+                    }
                 }
-
                 try {
                     picMap.put(path, obj);
                 }catch (Exception e) {
